@@ -19,27 +19,27 @@ public class KhuyenMai {
     @Column
     private String ma;
 
-    @Column
+    @Column(name = "Mo_ta")
     private String moTa;
 
-    @Column
+    @Column(name = "Loai_khuyen_mai")
     private String loaiKhuyenMai;
 
-    @Column
+    @Column(name = "Phan_tram_giam_gia")
     private Float phanTramGiamGia;
 
-    @Column
+    @Column(name = "So_tien_giam")
     private Double soTienGiam;
 
-    @Column
+    @Column(name = "Ngay_bat_dau")
     @Temporal(TemporalType.DATE)
     private Date ngayBatDau;
 
-    @Column
+    @Column(name = "Ngay_ket_thuc")
     @Temporal(TemporalType.DATE)
     private Date ngayKetThuc;
 
-    @Column
+    @Column(name = "Dieu_kien")
     private String dieuKien;
 
     // Getters and Setters
