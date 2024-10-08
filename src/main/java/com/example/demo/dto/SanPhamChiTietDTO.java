@@ -16,6 +16,7 @@ public class SanPhamChiTietDTO {
     private List<String> hinhAnh;
     private String tenSanPham;
     private Double gia;
+    private double giaSauGiam;
     private String tenMauSac;
     private String loaiMay;
     private String chatLieuVo;
