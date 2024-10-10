@@ -27,5 +27,4 @@ public class GioHang {
     @Column
     private Integer tongSoLuong;
 
-    // Getters and Setters
 }
