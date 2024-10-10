@@ -37,24 +37,23 @@ public class ChiTietSanPham {
     @JoinColumn(name = "id_chat_lieu_day")
     private ChatLieuDay chatLieuDay;
 
-    @Column
+    @Column(name = "kich_thuoc")
     private String kichThuoc;
 
-    @Column
+    @Column(name = "chong_nuoc")
     private String chongNuoc;
 
     @ManyToOne
     @JoinColumn(name = "id_loai_kinh")
     private LoaiKinh loaiKinh;
 
-    @Column
-    private String hinhDang;
-
-    @Column
+    @Column(name = "xuat_xu")
     private String xuatXu;
 
-    @Column
+    @Column(name = "bao_hanh")
     private String baoHanh;
-
+    @ManyToOne
+    @JoinColumn(name = "id_hinh_dang")
+    private HinhDang hinhDang;
     // Getters and Setters
 }
