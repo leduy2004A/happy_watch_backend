@@ -29,10 +29,10 @@ public class NguoiDung {
     @Column
     private String password;
 
-    @Column
+    @Column(name = "dia_chi")
     private String diaChi;
 
-    @Column
+    @Column(name = "dien_thoai")
     private String dienThoai;
 
     @ManyToOne

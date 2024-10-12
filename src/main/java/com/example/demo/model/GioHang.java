@@ -17,14 +17,14 @@ public class GioHang {
     @Column
     private String ma;
 
-    @Column
+    @Column(name = "Tong_gia")
     private Double tongGia;
 
     @ManyToOne
     @JoinColumn(name = "id_nguoi_dung")
     private NguoiDung nguoiDung;
 
-    @Column
+    @Column(name = "Tong_so_luong")
     private Integer tongSoLuong;
 
 }
