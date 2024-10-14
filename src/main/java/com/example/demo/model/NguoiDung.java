@@ -10,33 +10,34 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "nguoi_dung")
 public class NguoiDung {
+    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "Ma")
     private String ma;
 
-    @Column
+    @Column(name = "Avatar")
     private String avatar;
 
-    @Column
+    @Column(name = "Ten")
     private String ten;
 
-    @Column
+    @Column(name = "Username")
     private String username;
 
-    @Column
+    @Column(name = "Password")
     private String password;
 
-    @Column
+    @Column(name = "Dia_chi")
     private String diaChi;
 
-    @Column
+    @Column(name = "Dien_thoai")
     private String dienThoai;
 
     @ManyToOne
-    @JoinColumn(name = "id_vai_tro")
+    @JoinColumn(name = "Id_vai_tro")
     private VaiTro vaiTro;
 }
 

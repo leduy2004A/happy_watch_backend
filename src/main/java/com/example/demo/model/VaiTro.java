@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "vai_tro")
 public class VaiTro {
+    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "Ten_vai_tro")
     private String tenVaiTro;
 
 
