@@ -38,7 +38,7 @@ public class NguoiDung {
     private String dienThoai;
 
     @ManyToOne
-    @JoinColumn(name = "id_vai_tro")
+    @JoinColumn(name = "Id_vai_tro")
     private VaiTro vaiTro;
 
     public NguoiDung(NguoiDungRegisterDTO nguoiDungRegisterDTO) {
