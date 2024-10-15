@@ -39,5 +39,7 @@ public class HoaDon {
     @Column
     private String trangThai;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "id_thanh_toan")
+    private ThanhToan thanhToan;
 }

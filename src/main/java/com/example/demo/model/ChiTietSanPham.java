@@ -55,5 +55,6 @@ public class ChiTietSanPham {
     @ManyToOne
     @JoinColumn(name = "id_hinh_dang")
     private HinhDang hinhDang;
-    // Getters and Setters
+    @Column(name = "so_luong")
+    private int soLuong;
 }

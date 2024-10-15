@@ -13,9 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SanPhamService {
@@ -28,15 +32,57 @@ public class SanPhamService {
     private HinhAnhRepository hinhAnhRepository;
     @Autowired
     private KhuyenMaiRepository khuyenMaiRepository;
-    public double tinhGiaSauGiam(double giaGoc, KhuyenMai khuyenMai) {
-        double giaSauGiam = giaGoc;
-        if("phan tram".equalsIgnoreCase(khuyenMai.getLoaiKhuyenMai())) {
-            giaSauGiam = giaGoc - (giaGoc * khuyenMai.getPhanTramGiamGia() / 100);
-        } else if ("so tien".equalsIgnoreCase(khuyenMai.getLoaiKhuyenMai())) {
-            giaSauGiam = giaGoc - khuyenMai.getSoTienGiam();
-        }
-        return Math.max(giaSauGiam, 0);
+
+
+    public SanPham createSanPham(SanPham sanPham) {
+        sanPham.setCreatedAt(LocalDate.now());
+        sanPham.setUpdatedAt(LocalDate.now());
+        return sanPhamRepository.save(sanPham);
     }
+    public BigDecimal tinhGiaSauGiam(BigDecimal giaGoc, KhuyenMai khuyenMai) {
+        BigDecimal giaSauGiam = giaGoc;
+
+        if (khuyenMai != null) { // Kiểm tra khuyến mãi không null
+            if ("phan tram".equalsIgnoreCase(khuyenMai.getLoaiKhuyenMai())) {
+                BigDecimal phanTramGiamGia = BigDecimal.valueOf(khuyenMai.getPhanTramGiamGia());
+                BigDecimal giamGia = giaGoc.multiply(phanTramGiamGia).divide(BigDecimal.valueOf(100));
+                giaSauGiam = giaGoc.subtract(giamGia);
+            } else if ("so tien".equalsIgnoreCase(khuyenMai.getLoaiKhuyenMai())) {
+                // Kiểm tra giá trị không null
+                BigDecimal soTienGiam = khuyenMai.getSoTienGiam();
+                giaSauGiam = giaGoc.subtract(soTienGiam);
+            }
+        }
+
+        return giaSauGiam.max(BigDecimal.ZERO);
+    }
+
+    public SanPham updateSanPhamByMa(String ma, SanPham sanPhamDetails) {
+        SanPham existingSanPham = sanPhamRepository.findByMa(ma);
+        if (existingSanPham != null) {
+            existingSanPham.setTen(sanPhamDetails.getTen());
+            existingSanPham.setGia(sanPhamDetails.getGia());
+            existingSanPham.setMoTa(sanPhamDetails.getMoTa());
+            existingSanPham.setUpdatedAt(LocalDate.now());
+            return sanPhamRepository.save(existingSanPham);
+        }
+        return null;
+    }
+
+    public List<SanPhamChiTietDTO> getAllSanPham() {
+        List<SanPham> sanPhams = sanPhamRepository.findAll();
+        List<SanPhamChiTietDTO> result = new ArrayList<>();
+
+        for (SanPham sanPham : sanPhams) {
+            List<ChiTietSanPham> chiTietSanPhams = chiTietSanPhamRepository.findBySanPham_Id(sanPham.getId());
+            for (ChiTietSanPham chiTiet : chiTietSanPhams) {
+                SanPhamChiTietDTO dto = createSanPhamChiTietDTO(sanPham, chiTiet);
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
     public Page<SanPhamChiTietDTO> getAllSanPhamWithDetails(Pageable pageable) {
         Page<SanPham> sanPhams = sanPhamRepository.findAll(pageable);
         List<SanPhamChiTietDTO> result = new ArrayList<>();
@@ -74,7 +120,7 @@ public class SanPhamService {
         dto.setGia(sanPham.getGia());
         KhuyenMai khuyenMai = sanPham.getKhuyenMai();
         if (khuyenMai != null) {
-            double giaSauGiam = tinhGiaSauGiam(dto.getGia(), khuyenMai);
+            BigDecimal giaSauGiam = tinhGiaSauGiam(dto.getGia(), khuyenMai);
             dto.setGiaSauGiam(giaSauGiam);
         } else {
             dto.setGiaSauGiam(dto.getGia());
@@ -101,7 +147,7 @@ public class SanPhamService {
         dto.setGia(sanPham.getGia());
         KhuyenMai khuyenMai = sanPham.getKhuyenMai();
         if (khuyenMai != null) {
-            double giaSauGiam = tinhGiaSauGiam(dto.getGia(), khuyenMai);
+            BigDecimal giaSauGiam = tinhGiaSauGiam(dto.getGia(), khuyenMai);
             dto.setGiaSauGiam(giaSauGiam);
         } else {
             dto.setGiaSauGiam(dto.getGia());
