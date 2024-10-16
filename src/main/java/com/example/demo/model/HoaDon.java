@@ -40,5 +40,7 @@ public class HoaDon {
     @Column(name = "Trang_thai")
     private String trangThai;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "id_thanh_toan")
+    private ThanhToan thanhToan;
 }
