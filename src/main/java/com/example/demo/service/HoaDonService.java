@@ -3,9 +3,11 @@ package com.example.demo.service;
 import com.example.demo.dto.HoaDonDTO;
 import com.example.demo.model.HoaDon;
 import com.example.demo.model.NguoiDung;
+import com.example.demo.model.ThanhToan;
 import com.example.demo.model.VaiTro;
 import com.example.demo.repository.HoaDonRepository;
 import com.example.demo.repository.NguoiDungRepository;
+import com.example.demo.repository.ThanhToanRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +29,9 @@ public class HoaDonService {
     @Autowired
     private NguoiDungRepository nguoiDungRepository;
 
+    @Autowired
+    private ThanhToanRepository thanhToanRepository;
+
     public Page<HoaDonDTO> getAllHoaDonWithDetails(Pageable pageable) {
 
         Page<HoaDon> hoaDons = hoaDonRepository.findAll(pageable);
@@ -34,6 +40,7 @@ public class HoaDonService {
         for (HoaDon hoaDon : hoaDons.getContent()) {
             NguoiDung nguoiDung = hoaDon.getNguoiDung();
             VaiTro vaiTro = nguoiDung.getVaiTro();
+            ThanhToan thanhToan = hoaDon.getThanhToan();
 
             HoaDonDTO dto = new HoaDonDTO();
             dto.setHoaDonId(hoaDon.getId());
@@ -53,6 +60,11 @@ public class HoaDonService {
 
             dto.setVaiTroId(vaiTro.getId());
             dto.setVaiTroTen(vaiTro.getTenVaiTro());
+
+            dto.setThanhToanId(thanhToan.getId());
+            dto.setMaThanhToan(thanhToan.getMa());
+            dto.setPhuongThucThanhToan(thanhToan.getPhuongThuc());
+            dto.setSoTien(thanhToan.getSoTien());
 
             result.add(dto);
         }
@@ -65,6 +77,7 @@ public class HoaDonService {
             HoaDon hoaDon = hoaDonOptional.get();
             NguoiDung nguoiDung = hoaDon.getNguoiDung();
             VaiTro vaiTro = nguoiDung.getVaiTro();
+            ThanhToan thanhToan = hoaDon.getThanhToan();
 
             HoaDonDTO dto = new HoaDonDTO();
             dto.setHoaDonId(hoaDon.getId());
@@ -84,6 +97,12 @@ public class HoaDonService {
 
             dto.setVaiTroId(vaiTro.getId());
             dto.setVaiTroTen(vaiTro.getTenVaiTro());
+
+            dto.setThanhToanId(thanhToan.getId());
+            dto.setMaThanhToan(thanhToan.getMa());
+            dto.setPhuongThucThanhToan(thanhToan.getPhuongThuc());
+            dto.setSoTien(thanhToan.getSoTien());
+
             return Optional.of(dto);
         }
         return Optional.empty();
@@ -93,7 +112,7 @@ public class HoaDonService {
         HoaDon hoaDonNew = new HoaDon();
         hoaDonNew.setMa(hoaDon.getMa());
         hoaDonNew.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
-        hoaDonNew.setGia(hoaDon.getGia());
+        hoaDonNew.setGia(BigDecimal.valueOf(0.0));
         hoaDonNew.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
         hoaDonNew.setNgayTao(hoaDon.getNgayTao());
         hoaDonNew.setTrangThai(hoaDon.getTrangThai());
@@ -118,6 +137,19 @@ public class HoaDonService {
                 Optional<NguoiDung> nguoiDungOpt = nguoiDungRepository.findById(hoaDon.getNguoiDung().getId());
                 if (nguoiDungOpt.isPresent()) {
                     existingHoaDon.setNguoiDung(nguoiDungOpt.get());
+                } else {
+                    // Xử lý trường hợp NguoiDung không tồn tại
+                    throw new EntityNotFoundException("NguoiDung not found with id: " + hoaDon.getNguoiDung().getId());
+                }
+            } else {
+                // Xử lý trường hợp NguoiDung không được cung cấp hoặc không có ID
+                existingHoaDon.setNguoiDung(null);
+            }
+
+            if (hoaDon.getThanhToan() != null && hoaDon.getThanhToan().getId() != null) {
+                Optional<ThanhToan> thanhToanOptional = thanhToanRepository.findById(hoaDon.getThanhToan().getId());
+                if (thanhToanOptional.isPresent()) {
+                    existingHoaDon.setThanhToan(thanhToanOptional.get());
                 } else {
                     // Xử lý trường hợp NguoiDung không tồn tại
                     throw new EntityNotFoundException("NguoiDung not found with id: " + hoaDon.getNguoiDung().getId());

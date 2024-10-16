@@ -49,7 +49,7 @@ public class SanPhamService {
                 giaSauGiam = giaGoc.subtract(giamGia);
             } else if ("so tien".equalsIgnoreCase(khuyenMai.getLoaiKhuyenMai())) {
                 // Kiểm tra giá trị không null
-                BigDecimal soTienGiam = khuyenMai.getSoTienGiam();
+                BigDecimal soTienGiam = BigDecimal.valueOf(khuyenMai.getSoTienGiam()) ;
                 giaSauGiam = giaGoc.subtract(soTienGiam);
             }
         }

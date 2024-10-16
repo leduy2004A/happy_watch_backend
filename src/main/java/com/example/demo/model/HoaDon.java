@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -28,7 +29,7 @@ public class HoaDon {
     private String tenNguoiNhan;
 
     @Column(name = "Gia")
-    private Double gia;
+    private BigDecimal gia;
 
     @Column(name = "Dia_chi_giao_hang")
     private String diaChiGiaoHang;

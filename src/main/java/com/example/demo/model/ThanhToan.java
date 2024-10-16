@@ -17,12 +17,12 @@ public class ThanhToan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "ma")
     private String ma;
 
-    @Column
+    @Column(name = "phuong_thuc")
     private String phuongThuc;
 
-    @Column
+    @Column(name = "so_tien")
     private BigDecimal soTien;
 }

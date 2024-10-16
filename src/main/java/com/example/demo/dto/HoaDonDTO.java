@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -14,7 +15,7 @@ public class HoaDonDTO {
     private Long hoaDonId;
     private String hoaDonMa;
     private String tenNguoiNhan;
-    private Double gia;
+    private BigDecimal gia;
     private String diaChiGiaoHang;
     private Date ngayTao;
     private String trangThai;
@@ -28,6 +29,11 @@ public class HoaDonDTO {
 
     private Long vaiTroId;
     private String vaiTroTen;
+
+    private Long thanhToanId;
+    private String maThanhToan;
+    private String phuongThucThanhToan;
+    private BigDecimal soTien;
 
     // Constructors, getters, and setters
 }

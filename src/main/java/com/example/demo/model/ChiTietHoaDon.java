@@ -20,10 +20,10 @@ public class ChiTietHoaDon {
     private HoaDon hoaDon;
 
     @ManyToOne
-    @JoinColumn(name = "id_chi_tiet_san_pham")
+    @JoinColumn(name = "Id_san_pham_chi_tiet")
     private ChiTietSanPham chiTietSanPham;
 
-    @Column
+    @Column(name = "So_luong")
     private Integer soLuong;
 
 }
