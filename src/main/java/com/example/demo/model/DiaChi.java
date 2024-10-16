@@ -5,24 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="thanh_toan")
-public class ThanhToan {
+@Data
+@Table(name = "dia_chi")
+public class DiaChi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "ma", nullable = false)
     private String ma;
 
-    @Column(name = "phuong_thuc")
-    private String phuongThuc;
+    @Column(name = "dia_chi", nullable = false)
+    private String diaChi;
 
-    @Column(name = "so_tien")
-    private BigDecimal soTien;
+    @ManyToOne
+    @JoinColumn(name = "id_nguoi_dung")
+    private NguoiDung nguoiDung;
 }

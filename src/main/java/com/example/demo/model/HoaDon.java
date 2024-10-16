@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -12,34 +13,39 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name = "hoa_don")
 public class HoaDon {
+    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "Ma")
     private String ma;
 
-    @ManyToOne
-    @JoinColumn(name = "id_nguoi_dung")
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "Id_nguoi_dung")
     private NguoiDung nguoiDung;
 
-    @Column
+    @Column(name = "Ten_nguoi_nhan")
     private String tenNguoiNhan;
 
-    @Column
-    private Double gia;
+    @Column(name = "Gia")
+    private BigDecimal gia;
 
-    @Column
+    @Column(name = "Dia_chi_giao_hang")
     private String diaChiGiaoHang;
 
-    @Column
+    @Column(name = "Ngay_tao")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayTao;
 
-    @Column
+    @Column(name = "Trang_thai")
     private String trangThai;
 
     @ManyToOne
     @JoinColumn(name = "id_thanh_toan")
     private ThanhToan thanhToan;
+
+    @ManyToOne
+    @JoinColumn(name = "id_nhan_vien")
+    private NguoiDung nhanVien;
 }

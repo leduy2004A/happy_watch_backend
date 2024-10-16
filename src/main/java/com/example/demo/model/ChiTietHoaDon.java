@@ -23,7 +23,7 @@ public class ChiTietHoaDon {
     @JoinColumn(name = "id_chi_tiet_san_pham")
     private ChiTietSanPham chiTietSanPham;
 
-    @Column
+    @Column(name = "so_luong")
     private Integer soLuong;
 
 }

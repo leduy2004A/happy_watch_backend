@@ -29,10 +29,8 @@ public class NguoiDung {
     @Column
     private String password;
 
-    @Column
-    private String diaChi;
 
-    @Column
+    @Column(name = "dien_thoai")
     private String dienThoai;
 
     @ManyToOne
