@@ -21,16 +21,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
 @RestController
-@RequestMapping("/api/gio-hang")
+@RequestMapping("/api/carts")
 @RequiredArgsConstructor
 public class GioHangController {
-    private final GioHangRepository gioHangRepository;
-    private final ChiTietGioHangRepository chiTietGioHangRepository;
 
-    @GetMapping("/all")
+    private final GioHangRepository gioHangRepository;
+
+    @GetMapping()
     public ResponseEntity<Page<GioHang>> getAllCarts(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -38,7 +36,7 @@ public class GioHangController {
     }
 
     @GetMapping("/{ma}")
-    public ResponseEntity<GioHang> getMethodName(@PathVariable String ma) {
+    public ResponseEntity<GioHang> getCart(@PathVariable String ma) {
         GioHang gioHang = gioHangRepository.findByMa(ma);
         if (gioHang == null) {
             return ResponseEntity.notFound().build();
@@ -47,7 +45,7 @@ public class GioHangController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GioHang> putMethodName(@PathVariable Long id, @RequestBody GioHang gioHang) {
+    public ResponseEntity<GioHang> updateCart(@PathVariable Long id, @RequestBody GioHang gioHang) {
         if (!gioHangRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -55,19 +53,20 @@ public class GioHangController {
     }
 
     @PostMapping
-    public ResponseEntity<GioHang> postMethodName(@RequestBody GioHang gioHang) {
+    public ResponseEntity<GioHang> saveCart(@RequestBody GioHang gioHang) {
         gioHang.setId(Long.valueOf(0));
+        gioHang.setTongGia(Double.valueOf(0));
+        gioHang.setTongSoLuong(Integer.valueOf(0));
         return ResponseEntity.ok(gioHangRepository.save(gioHang));
     }
 
-    @DeleteMapping("/{ma}")
-    public ResponseEntity<GioHang> deleteMethodName(@PathVariable String ma) {
-        GioHang gioHang = gioHangRepository.findByMa(ma);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GioHang> deleteCart(@PathVariable Long id) {
+        GioHang gioHang = gioHangRepository.findById(id).orElse(null);
         if (gioHang == null) {
             return ResponseEntity.notFound().build();
         }
         gioHangRepository.delete(gioHang);
         return ResponseEntity.ok(gioHang);
     }
-    
 }

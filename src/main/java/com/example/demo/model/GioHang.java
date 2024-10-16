@@ -1,13 +1,22 @@
 package com.example.demo.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity
-@Data
-@AllArgsConstructor
+import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name = "gio_hang")
 public class GioHang {
     @Id
@@ -26,5 +35,9 @@ public class GioHang {
 
     @Column(name = "Tong_so_luong")
     private Integer tongSoLuong;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "gioHang", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH})
+    Set<ChiTietGioHang> cartDetails;
 
 }
