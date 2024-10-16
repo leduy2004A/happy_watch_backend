@@ -3,9 +3,11 @@ package com.example.demo.service;
 import com.example.demo.dto.ChiTietHoaDonDTO;
 import com.example.demo.model.ChiTietHoaDon;
 import com.example.demo.model.ChiTietSanPham;
+import com.example.demo.model.HinhAnh;
 import com.example.demo.model.HoaDon;
 import com.example.demo.repository.ChiTietHoaDonRepository;
 import com.example.demo.repository.ChiTietSanPhamRepository;
+import com.example.demo.repository.HinhAnhRepository;
 import com.example.demo.repository.HoaDonRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class ChiTietHoaDonService {
     private HoaDonRepository hoaDonRepository;
     @Autowired
     private ChiTietSanPhamRepository chiTietSanPhamRepository;
+    @Autowired
+    private HinhAnhRepository hinhAnhRepository;
 
 
     public Page<ChiTietHoaDonDTO> getAllChiTietHoaDonWithDetails(Pageable pageable) {
@@ -40,6 +44,7 @@ public class ChiTietHoaDonService {
             ChiTietHoaDonDTO dto = new ChiTietHoaDonDTO();
             dto.setChiTietHoaDonId(chiTietHoaDonDTO.getChiTietHoaDonId());
             dto.setHoaDonId(chiTietHoaDonDTO.getHoaDonId());
+
             BigDecimal slsp = BigDecimal.valueOf(chiTietHoaDonDTO.getSoLuong()) ;
 
             BigDecimal giasp = chiTietHoaDonDTO.getGiaSanPham();
@@ -54,7 +59,18 @@ public class ChiTietHoaDonService {
             dto.setKhuyenMaiId(chiTietHoaDonDTO.getKhuyenMaiId());
             dto.setChiTietSanPhamId(chiTietHoaDonDTO.getChiTietSanPhamId());
             dto.setMaSanPhamChiTiet(chiTietHoaDonDTO.getMaSanPham());
+            dto.setChatLieuDaySanPham(chiTietHoaDonDTO.getChatLieuDaySanPham());
+            dto.setChatLieuVoSanPham(chiTietHoaDonDTO.getChatLieuVoSanPham());
+            dto.setHinhDangSanPham(chiTietHoaDonDTO.getHinhDangSanPham());
+            dto.setLoaiKinhSanPham(chiTietHoaDonDTO.getLoaiKinhSanPham());
+            dto.setLoaiMaySanPham(chiTietHoaDonDTO.getLoaiMaySanPham());
+            dto.setMauSacSanPham(chiTietHoaDonDTO.getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDonDTO.getSoLuong());
+            dto.setGiaTungSanPham(chiTietHoaDonDTO.getGiaTungSanPham());
+
+            List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDonDTO.getSanPhamId());
+
+            dto.setHinhAnh(hinhAnhData);
 
             result.add(dto);
         }
@@ -82,7 +98,18 @@ public class ChiTietHoaDonService {
             dto.setKhuyenMaiId(chiTietHoaDonOptional.get().getKhuyenMaiId());
             dto.setChiTietSanPhamId(chiTietHoaDonOptional.get().getChiTietSanPhamId());
             dto.setMaSanPhamChiTiet(chiTietHoaDonOptional.get().getMaSanPhamChiTiet());
+            dto.setChatLieuDaySanPham(chiTietHoaDonOptional.get().getChatLieuDaySanPham());
+            dto.setChatLieuVoSanPham(chiTietHoaDonOptional.get().getChatLieuVoSanPham());
+            dto.setHinhDangSanPham(chiTietHoaDonOptional.get().getHinhDangSanPham());
+            dto.setLoaiKinhSanPham(chiTietHoaDonOptional.get().getLoaiKinhSanPham());
+            dto.setLoaiMaySanPham(chiTietHoaDonOptional.get().getLoaiMaySanPham());
+            dto.setMauSacSanPham(chiTietHoaDonOptional.get().getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDonOptional.get().getSoLuong());
+            dto.setGiaTungSanPham(chiTietHoaDonOptional.get().getGiaTungSanPham());
+            
+            List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDonOptional.get().getSanPhamId());
+
+            dto.setHinhAnh(hinhAnhData);
 
             return Optional.of(dto);
         }

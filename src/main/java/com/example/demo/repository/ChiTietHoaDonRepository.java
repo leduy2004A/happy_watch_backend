@@ -15,16 +15,35 @@ import java.util.Optional;
 @Repository
 public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, Long> {
     @Query("""
-    SELECT new com.example.demo.dto.ChiTietHoaDonDTO(cthd.id, hd.id, hd.gia, sp.id, sp.ma, sp.ten, sp.gia, sp.khuyenMai.id, ctsp.id, ctsp.ma, cthd.soLuong) 
-    FROM ChiTietHoaDon cthd
-    join ChiTietSanPham ctsp on cthd.chiTietSanPham.id = ctsp.id
-    join SanPham sp on ctsp.sanPham.id = sp.id
-    join HoaDon hd on cthd.hoaDon.id = hd.id
-""")
+        SELECT new com.example.demo.dto.ChiTietHoaDonDTO(
+            cthd.id, 
+            hd.id, 
+            hd.gia, 
+            sp.id, 
+            sp.ma, 
+            sp.ten, 
+            sp.gia, 
+            sp.khuyenMai.id, 
+            ctsp.id, 
+            ctsp.ma, 
+            ctsp.chatLieuDay.ten, 
+            ctsp.chatLieuVo.ten, 
+            ctsp.hinhDang.ten, 
+            ctsp.loaiKinh.ten, 
+            ctsp.loaiMay.ten, 
+            ctsp.mauSac.ten, 
+            cthd.soLuong, 
+            cthd.giaTungSanPham
+        ) 
+        FROM ChiTietHoaDon cthd
+        JOIN cthd.chiTietSanPham ctsp
+        JOIN ctsp.sanPham sp
+        JOIN cthd.hoaDon hd
+    """)
     Page<ChiTietHoaDonDTO> findAllChiTietHoaDon(Pageable pageable);
 
     @Query("""
-    SELECT new com.example.demo.dto.ChiTietHoaDonDTO(cthd.id, hd.id, hd.gia, sp.id, sp.ma, sp.ten, sp.gia, sp.khuyenMai.id, ctsp.id, ctsp.ma, cthd.soLuong) 
+    SELECT new com.example.demo.dto.ChiTietHoaDonDTO(cthd.id, hd.id, hd.gia, sp.id, sp.ma, sp.ten, sp.gia, sp.khuyenMai.id, ctsp.id, ctsp.ma, ctsp.chatLieuDay.ten, ctsp.chatLieuVo.ten, ctsp.hinhDang.ten, ctsp.loaiKinh.ten, ctsp.loaiMay.ten, ctsp.mauSac.ten, cthd.soLuong, cthd.giaTungSanPham) 
     FROM ChiTietHoaDon cthd
     JOIN ChiTietSanPham ctsp ON cthd.chiTietSanPham.id = ctsp.id
     JOIN SanPham sp ON ctsp.sanPham.id = sp.id
