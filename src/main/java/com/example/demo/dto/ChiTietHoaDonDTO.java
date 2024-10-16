@@ -14,7 +14,7 @@ public class ChiTietHoaDonDTO {
 
     Long hoaDonId;
 
-    BigDecimal tongTienHoaDon;
+    BigDecimal tongTienChiTietHoaDon;
 
     Long sanPhamId;
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -46,8 +47,8 @@ public class ChiTietHoaDonController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ChiTietHoaDon> updateHoaDon(@RequestBody ChiTietHoaDon chiTietHoaDon) {
-        Optional<ChiTietHoaDon> chiTietHoaDonOptional = chiTietHoaDonService.updateChiTietHoaDon(chiTietHoaDon);
+    public ResponseEntity<ChiTietHoaDon> updateHoaDon(@RequestBody ChiTietHoaDon chiTietHoaDon, @RequestParam("giaTungSanPham") BigDecimal giaTungSanPham) {
+        Optional<ChiTietHoaDon> chiTietHoaDonOptional = chiTietHoaDonService.updateChiTietHoaDon(chiTietHoaDon, giaTungSanPham);
         return chiTietHoaDonOptional
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

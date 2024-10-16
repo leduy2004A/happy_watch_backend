@@ -46,7 +46,7 @@ public class ChiTietHoaDonService {
 
             BigDecimal giaa = slsp.multiply(giasp);
 
-            dto.setTongTienHoaDon(giaa);
+            dto.setTongTienChiTietHoaDon(giaa);
             dto.setSanPhamId(chiTietHoaDonDTO.getSanPhamId());
             dto.setMaSanPham(chiTietHoaDonDTO.getMaSanPham());
             dto.setTenSanPham(chiTietHoaDonDTO.getTenSanPham());
@@ -74,7 +74,7 @@ public class ChiTietHoaDonService {
 
             BigDecimal giaa = slsp.multiply(giasp);
 
-            dto.setTongTienHoaDon(giaa);
+            dto.setTongTienChiTietHoaDon(giaa);
             dto.setSanPhamId(chiTietHoaDonOptional.get().getSanPhamId());
             dto.setMaSanPham(chiTietHoaDonOptional.get().getMaSanPham());
             dto.setTenSanPham(chiTietHoaDonOptional.get().getTenSanPham());
@@ -94,7 +94,7 @@ public class ChiTietHoaDonService {
         chiTietHoaDonNew.setHoaDon(chiTietHoaDon.getHoaDon());
         chiTietHoaDonNew.setChiTietSanPham(chiTietHoaDon.getChiTietSanPham());
         chiTietHoaDonNew.setSoLuong(chiTietHoaDon.getSoLuong());
-
+        chiTietHoaDonNew.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
         // Lưu vào cơ sở dữ liệu
         chiTietHoaDonRepository.save(chiTietHoaDonNew);
 
@@ -103,7 +103,7 @@ public class ChiTietHoaDonService {
 
 
 
-    public Optional<ChiTietHoaDon> updateChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
+    public Optional<ChiTietHoaDon> updateChiTietHoaDon(ChiTietHoaDon chiTietHoaDon, BigDecimal giaTungSanPham) {
         // Tìm hóa đơn theo mã
         Optional<ChiTietHoaDon> chiTietHoaDonOptional = chiTietHoaDonRepository.findChiTietHoaDonById(chiTietHoaDon.getId());
 
@@ -138,6 +138,8 @@ public class ChiTietHoaDonService {
             }
 
             existingChiTietHoaDon.setSoLuong(chiTietHoaDon.getSoLuong());
+
+            existingChiTietHoaDon.setGiaTungSanPham(giaTungSanPham);
 
             // Lưu lại hóa đơn đã cập nhật
             chiTietHoaDonRepository.save(existingChiTietHoaDon);
