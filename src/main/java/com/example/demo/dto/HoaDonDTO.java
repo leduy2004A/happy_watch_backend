@@ -24,7 +24,6 @@ public class HoaDonDTO {
     private String nguoiDungMa;
     private String nguoiDungTen;
     private String nguoiDungUsername;
-    private String nguoiDungDiaChi;
     private String nguoiDungDienThoai;
 
     private Long vaiTroId;
@@ -34,6 +33,11 @@ public class HoaDonDTO {
     private String maThanhToan;
     private String phuongThucThanhToan;
     private BigDecimal soTien;
+
+    private Long nguoiTaoId;
+    private String nguoiTaoMa;
+    private String nguoiTaoTen;
+    private String nguoiTaoUsername;
 
     // Constructors, getters, and setters
 }

@@ -41,6 +41,7 @@ public class HoaDonService {
             NguoiDung nguoiDung = hoaDon.getNguoiDung();
             VaiTro vaiTro = nguoiDung.getVaiTro();
             ThanhToan thanhToan = hoaDon.getThanhToan();
+            NguoiDung nguoiTao = hoaDon.getNhanVien();
 
             HoaDonDTO dto = new HoaDonDTO();
             dto.setHoaDonId(hoaDon.getId());
@@ -55,7 +56,6 @@ public class HoaDonService {
             dto.setNguoiDungMa(nguoiDung.getMa());
             dto.setNguoiDungTen(nguoiDung.getTen());
             dto.setNguoiDungUsername(nguoiDung.getUsername());
-            dto.setNguoiDungDiaChi(nguoiDung.getDiaChi());
             dto.setNguoiDungDienThoai(nguoiDung.getDienThoai());
 
             dto.setVaiTroId(vaiTro.getId());
@@ -65,6 +65,12 @@ public class HoaDonService {
             dto.setMaThanhToan(thanhToan.getMa());
             dto.setPhuongThucThanhToan(thanhToan.getPhuongThuc());
             dto.setSoTien(thanhToan.getSoTien());
+
+            dto.setNguoiTaoId(nguoiTao.getId());
+            dto.setNguoiTaoMa(nguoiTao.getMa());
+            dto.setNguoiTaoTen(nguoiTao.getTen());
+            dto.setNguoiTaoUsername(nguoiTao.getUsername());
+
 
             result.add(dto);
         }
@@ -78,6 +84,7 @@ public class HoaDonService {
             NguoiDung nguoiDung = hoaDon.getNguoiDung();
             VaiTro vaiTro = nguoiDung.getVaiTro();
             ThanhToan thanhToan = hoaDon.getThanhToan();
+            NguoiDung nguoiTao = hoaDon.getNhanVien();
 
             HoaDonDTO dto = new HoaDonDTO();
             dto.setHoaDonId(hoaDon.getId());
@@ -92,7 +99,6 @@ public class HoaDonService {
             dto.setNguoiDungMa(nguoiDung.getMa());
             dto.setNguoiDungTen(nguoiDung.getTen());
             dto.setNguoiDungUsername(nguoiDung.getUsername());
-            dto.setNguoiDungDiaChi(nguoiDung.getDiaChi());
             dto.setNguoiDungDienThoai(nguoiDung.getDienThoai());
 
             dto.setVaiTroId(vaiTro.getId());
@@ -102,6 +108,11 @@ public class HoaDonService {
             dto.setMaThanhToan(thanhToan.getMa());
             dto.setPhuongThucThanhToan(thanhToan.getPhuongThuc());
             dto.setSoTien(thanhToan.getSoTien());
+
+            dto.setNguoiTaoId(nguoiTao.getId());
+            dto.setNguoiTaoMa(nguoiTao.getMa());
+            dto.setNguoiTaoTen(nguoiTao.getTen());
+            dto.setNguoiTaoUsername(nguoiTao.getUsername());
 
             return Optional.of(dto);
         }
@@ -116,6 +127,8 @@ public class HoaDonService {
         hoaDonNew.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
         hoaDonNew.setNgayTao(hoaDon.getNgayTao());
         hoaDonNew.setTrangThai(hoaDon.getTrangThai());
+        hoaDonNew.setThanhToan(hoaDon.getThanhToan());
+        hoaDonNew.setNhanVien(hoaDon.getNhanVien());
 
         // Lưu vào cơ sở dữ liệu
         hoaDonRepository.save(hoaDonNew);
@@ -157,6 +170,19 @@ public class HoaDonService {
             } else {
                 // Xử lý trường hợp NguoiDung không được cung cấp hoặc không có ID
                 existingHoaDon.setNguoiDung(null);
+            }
+
+            if (hoaDon.getNhanVien() != null && hoaDon.getNhanVien().getId() != null) {
+                Optional<NguoiDung> nguoiTaoOptional = nguoiDungRepository.findById(hoaDon.getNhanVien().getId());
+                if (nguoiTaoOptional.isPresent()) {
+                    existingHoaDon.setNhanVien(nguoiTaoOptional.get());
+                } else {
+                    // Xử lý trường hợp NguoiDung không tồn tại
+                    throw new EntityNotFoundException("NguoiDung not found with id: " + hoaDon.getNhanVien().getId());
+                }
+            } else {
+                // Xử lý trường hợp NguoiDung không được cung cấp hoặc không có ID
+                existingHoaDon.setNhanVien(null);
             }
 
             existingHoaDon.setTenNguoiNhan(hoaDon.getTenNguoiNhan());

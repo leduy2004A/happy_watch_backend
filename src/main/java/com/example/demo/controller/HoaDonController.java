@@ -22,7 +22,7 @@ public class HoaDonController {
     @GetMapping("/all")
     public ResponseEntity<Page<HoaDonDTO>> getAllHoaDonWithDetails(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "1") int size) {
+            @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<HoaDonDTO> hoaDonList = hoaDonService.getAllHoaDonWithDetails(pageable);
         return ResponseEntity.ok(hoaDonList);
