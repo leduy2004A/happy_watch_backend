@@ -14,4 +14,5 @@ public interface ThanhToanRepository extends JpaRepository<ThanhToan,Long> {
             "FROM ThanhToan t " +
             "LEFT JOIN HoaDon h ON t.id = h.thanhToan.id")
     List<ThanhToanDTO> findAllThanhToanWithHoaDonMa();
+
 }

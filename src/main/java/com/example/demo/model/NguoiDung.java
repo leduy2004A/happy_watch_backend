@@ -20,17 +20,16 @@ public class NguoiDung {
     @Column
     private String avatar;
 
-    @Column
+    @Column(name = "Ten")
     private String ten;
 
-    @Column
+    @Column(name = "Username")
     private String username;
 
-    @Column
+    @Column(name = "Password")
     private String password;
 
-
-    @Column(name = "dien_thoai")
+    @Column(name = "Dien_thoai")
     private String dienThoai;
 
     @ManyToOne

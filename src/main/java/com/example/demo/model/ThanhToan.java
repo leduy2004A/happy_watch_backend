@@ -17,7 +17,7 @@ public class ThanhToan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "ma")
     private String ma;
 
     @Column(name = "phuong_thuc")

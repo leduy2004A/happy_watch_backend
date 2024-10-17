@@ -6,11 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Table(name = "dia_chi")
 public class DiaChi {
+    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,5 +24,6 @@ public class DiaChi {
 
     @ManyToOne
     @JoinColumn(name = "id_nguoi_dung")
+
     private NguoiDung nguoiDung;
 }

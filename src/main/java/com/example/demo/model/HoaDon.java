@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -36,7 +37,7 @@ public class HoaDon {
 
     @Column(name = "Ngay_tao")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date ngayTao;
+    private LocalDate ngayTao;
 
     @Column(name = "Trang_thai")
     private String trangThai;
