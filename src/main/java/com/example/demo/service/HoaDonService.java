@@ -16,9 +16,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class HoaDonService {
@@ -122,22 +124,18 @@ public class HoaDonService {
     public Optional<HoaDon> addHoaDon(HoaDon hoaDon) {
         HoaDon hoaDonNew = new HoaDon();
         hoaDonNew.setId(hoaDon.getId());
-        // Tạo mã hóa đơn mới
-        String lastMaHoaDon = hoaDonRepository.findLastMaHoaDon(); // Truy vấn để lấy mã hóa đơn gần nhất
-        int soHoaDon = 1;
 
-        if (lastMaHoaDon != null && lastMaHoaDon.startsWith("HD")) {
-            // Cắt phần số của mã hóa đơn
-            soHoaDon = Integer.parseInt(lastMaHoaDon.substring(2)) + 1;
-        }
 
-        String maHoaDon = "HD" + String.format("%03d", soHoaDon); // Tạo mã hóa đơn với số định dạng 5 chữ số
+        String maHoaDon = "HD" + UUID.randomUUID().toString().substring(0, 3); // Tạo mã hóa đơn với số định dạng 5 chữ số
 
         hoaDonNew.setMa(maHoaDon);
         hoaDonNew.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
         hoaDonNew.setGia(BigDecimal.valueOf(0.0));
         hoaDonNew.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
-        hoaDonNew.setNgayTao(hoaDon.getNgayTao());
+
+        LocalDate ngaytao = LocalDate.now();
+
+        hoaDonNew.setNgayTao(ngaytao);
         hoaDonNew.setTrangThai(hoaDon.getTrangThai());
         hoaDonNew.setThanhToan(hoaDon.getThanhToan());
         hoaDonNew.setNhanVien(hoaDon.getNhanVien());
@@ -147,6 +145,7 @@ public class HoaDonService {
 
         return Optional.of(hoaDonNew);
     }
+
 
 
 

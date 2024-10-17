@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -17,7 +18,7 @@ public class HoaDonDTO {
     private String tenNguoiNhan;
     private BigDecimal gia;
     private String diaChiGiaoHang;
-    private Date ngayTao;
+    private LocalDate ngayTao;
     private String trangThai;
 
     private Long nguoiDungId;
