@@ -120,7 +120,19 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     public Optional<HoaDon> addHoaDon(HoaDon hoaDon) {
         HoaDon hoaDonNew = new HoaDon();
-        hoaDonNew.setMa(hoaDon.getMa());
+        hoaDonNew.setId(hoaDon.getId());
+        // Tạo mã hóa đơn mới
+        String lastMaHoaDon = hoaDonRepository.findLastMaHoaDon(); // Truy vấn để lấy mã hóa đơn gần nhất
+        int soHoaDon = 1;
+
+        if (lastMaHoaDon != null && lastMaHoaDon.startsWith("HD")) {
+            // Cắt phần số của mã hóa đơn
+            soHoaDon = Integer.parseInt(lastMaHoaDon.substring(2)) + 1;
+        }
+
+        String maHoaDon = "HD" + String.format("%03d", soHoaDon); // Tạo mã hóa đơn với số định dạng 5 chữ số
+
+        hoaDonNew.setMa(maHoaDon);
         hoaDonNew.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
         hoaDonNew.setGia(BigDecimal.valueOf(0.0));
         hoaDonNew.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
@@ -132,8 +144,9 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         // Lưu vào cơ sở dữ liệu
         hoaDonRepository.save(hoaDonNew);
 
-        return Optional.of(hoaDon);
+        return Optional.of(hoaDonNew);
     }
+
 
 
 

@@ -19,4 +19,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     List<HoaDon> findHoaDonById(@Param("hoaDonId") Long hoaDonId);
 
     Optional<HoaDon> findByMa(String ma);
+
+    @Query("SELECT h.ma FROM HoaDon h ORDER BY h.ma DESC LIMIT 1")
+    String findLastMaHoaDon();
+
 }
