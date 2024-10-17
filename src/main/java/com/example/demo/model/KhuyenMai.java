@@ -3,7 +3,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -29,15 +32,15 @@ public class KhuyenMai {
     private Float phanTramGiamGia;
 
     @Column(name = "So_tien_giam")
-    private Double soTienGiam;
+    private BigDecimal soTienGiam;
 
     @Column(name = "Ngay_bat_dau")
     @Temporal(TemporalType.DATE)
-    private Date ngayBatDau;
+    private LocalDate ngayBatDau;
 
     @Column(name = "Ngay_ket_thuc")
     @Temporal(TemporalType.DATE)
-    private Date ngayKetThuc;
+    private LocalDate ngayKetThuc;
 
     @Column(name = "Dieu_kien")
     private String dieuKien;

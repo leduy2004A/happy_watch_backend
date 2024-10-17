@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,12 +22,12 @@ public class ChiTietHoaDon {
     private HoaDon hoaDon;
 
     @ManyToOne
-    @JoinColumn(name = "id_chi_tiet_gio_hang")
-    private ChiTietGioHang chiTietGioHang;
+    @JoinColumn(name = "Id_chi_tiet_san_pham")
+    private ChiTietSanPham chiTietSanPham;
 
-    @Column
+    @Column(name = "So_luong")
     private Integer soLuong;
 
-    @Column
-    private Double giaTungSanPham;
+    @Column(name = "Gia_tung_san_pham")
+    private BigDecimal giaTungSanPham;
 }

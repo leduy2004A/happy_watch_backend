@@ -1,4 +1,5 @@
 package com.example.demo.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,15 +9,21 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "vai_tro")
-public class VaiTro {
+@Table(name = "dia_chi")
+public class DiaChi {
     @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ten_vai_tro")
-    private String tenVaiTro;
+    @Column(name = "ma", nullable = false)
+    private String ma;
 
+    @Column(name = "dia_chi", nullable = false)
+    private String diaChi;
 
+    @ManyToOne
+    @JoinColumn(name = "id_nguoi_dung")
+
+    private NguoiDung nguoiDung;
 }

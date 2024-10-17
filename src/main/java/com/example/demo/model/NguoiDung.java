@@ -11,15 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "nguoi_dung")
 public class NguoiDung {
-    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Ma")
+    @Column
     private String ma;
 
-    @Column(name = "Avatar")
+    @Column
     private String avatar;
 
     @Column(name = "Ten")
@@ -31,14 +30,11 @@ public class NguoiDung {
     @Column(name = "Password")
     private String password;
 
-    @Column(name = "Dia_chi")
-    private String diaChi;
-
     @Column(name = "Dien_thoai")
     private String dienThoai;
 
     @ManyToOne
-    @JoinColumn(name = "Id_vai_tro")
+    @JoinColumn(name = "id_vai_tro")
     private VaiTro vaiTro;
 
     public NguoiDung(NguoiDungRegisterDTO nguoiDungRegisterDTO) {

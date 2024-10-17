@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -28,17 +30,23 @@ public class HoaDon {
     private String tenNguoiNhan;
 
     @Column(name = "Gia")
-    private Double gia;
+    private BigDecimal gia;
 
     @Column(name = "Dia_chi_giao_hang")
     private String diaChiGiaoHang;
 
     @Column(name = "Ngay_tao")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date ngayTao;
+    private LocalDate ngayTao;
 
     @Column(name = "Trang_thai")
     private String trangThai;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "id_thanh_toan")
+    private ThanhToan thanhToan;
+
+    @ManyToOne
+    @JoinColumn(name = "id_nhan_vien")
+    private NguoiDung nhanVien;
 }
