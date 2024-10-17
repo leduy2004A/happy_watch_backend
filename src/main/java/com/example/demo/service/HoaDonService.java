@@ -1,13 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.model.ChiTietHoaDon;
-import com.example.demo.model.ChiTietSanPham;
-import com.example.demo.model.HoaDon;
-import com.example.demo.model.ThanhToan;
-import com.example.demo.repository.ChiTietHoaDonRepository;
-import com.example.demo.repository.ChiTietSanPhamRepository;
-import com.example.demo.repository.HoaDonRepository;
-import com.example.demo.repository.ThanhToanRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +18,8 @@ public class HoaDonService {
 
     @Autowired
     private ChiTietSanPhamRepository chiTietSanPhamRepository;
-
+    @Autowired
+    private NguoiDungRepository nguoiDungRepository;
     @Autowired
     private ChiTietHoaDonRepository chiTietHoaDonRepository;
     public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc) {
@@ -49,5 +44,14 @@ public class HoaDonService {
         } else {
             throw new RuntimeException("Số tiền khách đưa không đủ để thanh toán hóa đơn.");
         }
+    }
+
+    public HoaDon updateHoaDonWithNguoiDung(Long idHoaDon, Long idNguoiDung) {
+        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
+                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
+        NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+        hoaDon.setNguoiDung(nguoiDung);
+        return hoaDonRepository.save(hoaDon);
     }
 }

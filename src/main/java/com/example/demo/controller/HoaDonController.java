@@ -23,4 +23,13 @@ public class HoaDonController {
         HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc);
         return ResponseEntity.ok(updatedHoaDon);
     }
+
+    @PutMapping("/update/khach-hang/{idHoaDon}")
+    public ResponseEntity<HoaDon> updateHoaDon(
+            @PathVariable Long idHoaDon,
+            @RequestParam Long idNguoiDung) {
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonWithNguoiDung(idHoaDon, idNguoiDung);
+        return ResponseEntity.ok(updatedHoaDon);
+    }
+
 }
