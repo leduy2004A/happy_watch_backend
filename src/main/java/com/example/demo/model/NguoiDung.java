@@ -29,8 +29,11 @@ public class NguoiDung {
     @Column(name = "Password")
     private String password;
 
-    @Column(name = "Dien_thoai")
-    private String dienThoai;
+    @Column(name = "gioi_tinh")
+    private String gioiTinh;
+
+    @Column(name = "trang_thai")
+    private boolean trangThai;
 
     @ManyToOne
     @JoinColumn(name = "id_vai_tro")
