@@ -36,7 +36,6 @@ public class HoaDon {
     private String diaChiGiaoHang;
 
     @Column(name = "Ngay_tao")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDate ngayTao;
 
     @Column(name = "Trang_thai")
