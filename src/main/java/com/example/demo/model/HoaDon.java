@@ -59,4 +59,7 @@ public class HoaDon {
     @ManyToOne
     @JoinColumn(name = "id_nhan_vien")
     private NguoiDung nhanVien;
+    @ManyToOne
+    @JoinColumn(name = "id_khuyen_mai_hoa_don")
+    private KhuyenMaiHoaDon khuyenMaiHoaDon;
 }
