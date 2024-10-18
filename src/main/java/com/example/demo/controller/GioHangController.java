@@ -35,9 +35,9 @@ public class GioHangController {
         return ResponseEntity.ok(gioHangRepository.findAll(pageable));
     }
 
-    @GetMapping("/{ma}")
-    public ResponseEntity<GioHang> getCart(@PathVariable String ma) {
-        GioHang gioHang = gioHangRepository.findByMa(ma);
+    @GetMapping("/{cartCode}")
+    public ResponseEntity<GioHang> getCart(@PathVariable String cartCode) {
+        GioHang gioHang = gioHangRepository.findByMa(cartCode);
         if (gioHang == null) {
             return ResponseEntity.notFound().build();
         }

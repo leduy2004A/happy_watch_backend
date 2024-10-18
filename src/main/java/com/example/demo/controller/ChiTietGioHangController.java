@@ -47,8 +47,8 @@ public class ChiTietGioHangController {
         return ResponseEntity.ok(gioHangService.getAllCartDetails(pageable));
     }
 
-    @GetMapping(value = "/id/{id}")
-    public ResponseEntity<GioHangChiTietDTO> getCartById(@PathVariable Long id) {
+    @GetMapping(value = "id/{id}")
+    public ResponseEntity<GioHangChiTietDTO> getCartDetailById(@PathVariable Long id) {
         return gioHangService.getCartDetailById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
