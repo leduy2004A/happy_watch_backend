@@ -191,14 +191,19 @@ public class ChiTietHoaDonService {
                 chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
                 chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
                 chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
+                chiTietHoaDonDTO.setMaSanPhamChiTiet(chiTietSanPham.getMa());
+                chiTietHoaDonDTO.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
+
+                BigDecimal giaTungSanPham = chiTietHoaDon.getGiaTungSanPham();
+
+                BigDecimal tongTienChiTietHoaDon = giaTungSanPham.multiply(new BigDecimal(chiTietHoaDon.getSoLuong()));
+                chiTietHoaDonDTO.setTongTienChiTietHoaDon(tongTienChiTietHoaDon);
+            } else {
+                System.out.println("SanPham is null");
             }
 
-            // Thiết lập mã chi tiết sản phẩm và giá từng sản phẩm
-            chiTietHoaDonDTO.setMaSanPhamChiTiet(chiTietSanPham.getMa());
-            chiTietHoaDonDTO.setGiaTungSanPham(chiTietSanPham.getSanPham().getGia());
-
             // Lấy hình ảnh nếu có
-            List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(sanPham.getId());
+            List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(sanPham != null ? sanPham.getId() : null);
             chiTietHoaDonDTO.setHinhAnh(hinhAnhData);
 
             // Thiết lập các thuộc tính có thể null trong chi tiết sản phẩm
@@ -242,29 +247,25 @@ public class ChiTietHoaDonService {
             chiTietHoaDonNew = new ChiTietHoaDon();
             chiTietHoaDonNew.setHoaDon(chiTietHoaDon.getHoaDon());
             chiTietHoaDonNew.setChiTietSanPham(chiTietHoaDon.getChiTietSanPham());
-            chiTietHoaDonNew.setSoLuong(chiTietHoaDon.getSoLuong() != null ? chiTietHoaDon.getSoLuong() : 0); // Thiết lập giá trị mặc định nếu là null
+            chiTietHoaDonNew.setSoLuong(chiTietHoaDon.getSoLuong() != null ? chiTietHoaDon.getSoLuong() : 0);
             chiTietHoaDonNew.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
         }
 
         // Lưu chiTietHoaDon vào cơ sở dữ liệu
         chiTietHoaDonNew = chiTietHoaDonRepository.save(chiTietHoaDonNew);
 
-        // Tính tổng tiền chi tiết hóa đơn
-        if (chiTietHoaDonNew.getChiTietSanPham() != null && chiTietHoaDonNew.getSoLuong() != null) {
-            BigDecimal tongTienChiTietHoaDon = chiTietHoaDonNew.getChiTietSanPham().getSanPham().getGia()
-                    .multiply(new BigDecimal(chiTietHoaDonNew.getSoLuong()));
-            chiTietHoaDonDTO.setTongTienChiTietHoaDon(tongTienChiTietHoaDon);
-        }
-
         // Thiết lập số lượng và ID cho DTO
         chiTietHoaDonDTO.setSoLuong(chiTietHoaDonNew.getSoLuong());
-        chiTietHoaDonDTO.setChiTietHoaDonId(chiTietHoaDonNew.getId()); // Gán giá trị cho chiTietHoaDonId
-
-        // Gán lại ID hóa đơn nếu có
-        chiTietHoaDonDTO.setHoaDonId(chiTietHoaDonNew.getHoaDon() != null ? chiTietHoaDonNew.getHoaDon().getId() : null); // Gán giá trị cho hoaDonId
+        chiTietHoaDonDTO.setChiTietHoaDonId(chiTietHoaDonNew.getId());
+        chiTietHoaDonDTO.setHoaDonId(chiTietHoaDonNew.getHoaDon() != null ? chiTietHoaDonNew.getHoaDon().getId() : null);
 
         return Optional.of(chiTietHoaDonDTO);
     }
+
+
+
+
+
 
 
 
