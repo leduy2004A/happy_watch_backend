@@ -31,8 +31,10 @@ public class DiaChi {
     @Column(name = "dia_chi_cu_the")
     private String diaChiCuThe;
 
+    @Column(name = "Dien_thoai")
+    private String dienThoai;
+
     @ManyToOne
     @JoinColumn(name = "id_nguoi_dung")
-
     private NguoiDung nguoiDung;
 }

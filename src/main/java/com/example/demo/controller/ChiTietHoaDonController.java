@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,13 +24,11 @@ public class ChiTietHoaDonController {
     private ChiTietHoaDonService chiTietHoaDonService;
 
     @GetMapping("/all")
-    public ResponseEntity<Page<ChiTietHoaDonDTO>> getAllChiTietHoaDonWithDetails(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ChiTietHoaDonDTO> chiTietHoaDonList = chiTietHoaDonService.getAllChiTietHoaDonWithDetails(pageable);
+    public ResponseEntity<List<ChiTietHoaDonDTO>> getAllChiTietHoaDonWithDetails() {
+        List<ChiTietHoaDonDTO> chiTietHoaDonList = chiTietHoaDonService.getAllChiTietHoaDonWithDetails();
         return ResponseEntity.ok(chiTietHoaDonList);
     }
+
 
     @GetMapping("/chi-tiet")
     public ResponseEntity<ChiTietHoaDonDTO> getHoaDonByMaChiTiet(@RequestParam("id") Long id) {
@@ -40,15 +39,17 @@ public class ChiTietHoaDonController {
     }
 
     @GetMapping("/all-sp")
-    public ResponseEntity<List<ChiTietHoaDonDTO>> getAllChiTietHoaDon(@RequestParam("idHD") Long idHD) {
-        List<ChiTietHoaDonDTO> chiTietHoaDonDTOList = chiTietHoaDonService.getChiTietHoaDon(idHD);
+    public ResponseEntity<Map<String, Object>> getAllChiTietHoaDon(@RequestParam("idHD") Long idHD) {
+        // Gọi phương thức trong service để lấy danh sách chi tiết hóa đơn và tổng tiền
+        Map<String, Object> chiTietHoaDonData = chiTietHoaDonService.getChiTietHoaDon(idHD);
 
-        if (chiTietHoaDonDTOList.isEmpty()) {
+        if (((List<ChiTietHoaDonDTO>) chiTietHoaDonData.get("chiTietHoaDons")).isEmpty()) {
             return ResponseEntity.notFound().build(); // Nếu danh sách trống, trả về 404 Not Found
         }
 
-        return ResponseEntity.ok(chiTietHoaDonDTOList); // Trả về danh sách nếu có dữ liệu
+        return ResponseEntity.ok(chiTietHoaDonData); // Trả về dữ liệu gồm chi tiết hóa đơn và tổng tiền
     }
+
 
 
     @PostMapping("/add")

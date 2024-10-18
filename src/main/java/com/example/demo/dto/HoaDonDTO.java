@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,11 @@ public class HoaDonDTO {
     private String hoaDonMa;
     private String tenNguoiNhan;
     private BigDecimal gia;
-    private String diaChiGiaoHang;
+    private String tinhThanhPho;
+    private String quanHuyen;
+    private String xaPhuongThiTran;
+    private String diaChiCuThe;
+    private String dienThoai;
     private LocalDate ngayTao;
     private String trangThai;
 
@@ -25,7 +30,6 @@ public class HoaDonDTO {
     private String nguoiDungMa;
     private String nguoiDungTen;
     private String nguoiDungUsername;
-    private String nguoiDungDienThoai;
 
     private Long vaiTroId;
     private String vaiTroTen;
