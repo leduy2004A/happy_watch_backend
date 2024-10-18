@@ -37,6 +37,8 @@ public class HoaDonController {
         HoaDon updatedHoaDon = hoaDonService.updateHoaDonWithNguoiDung(idHoaDon, idNguoiDung);
         return ResponseEntity.ok(updatedHoaDon);
     }
+
+
 //        @GetMapping("/all")
 //        public ResponseEntity<Page<HoaDonDTO>> getAllHoaDonWithDetails (
 //        @RequestParam(defaultValue = "0") int page,
