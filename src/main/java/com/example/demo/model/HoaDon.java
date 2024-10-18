@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 
 @Entity
 @Data
@@ -12,32 +14,47 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name = "hoa_don")
 public class HoaDon {
+    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "Ma")
     private String ma;
 
-    @ManyToOne
-    @JoinColumn(name = "id_nguoi_dung")
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "Id_nguoi_dung")
     private NguoiDung nguoiDung;
 
-    @Column
+    @Column(name = "Ten_nguoi_nhan")
     private String tenNguoiNhan;
 
-    @Column
-    private Double gia;
+    @Column(name = "Gia")
+    private BigDecimal gia;
 
-    @Column
-    private String diaChiGiaoHang;
+    @Column(name = "tinh_thanh_pho")
+    private String tinhThanhPho;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ngayTao;
+    @Column(name = "quan_huyen")
+    private String quanHuyen;
 
-    @Column
+    @Column(name = "xa_phuong_thi_tran")
+    private String xaPhuongThiTran;
+
+    @Column(name = "dia_chi_cu_the")
+    private String diaChiCuThe;
+
+    @Column(name = "Ngay_tao")
+    private LocalDate ngayTao;
+
+    @Column(name = "Trang_thai")
     private String trangThai;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "id_thanh_toan")
+    private ThanhToan thanhToan;
+
+    @ManyToOne
+    @JoinColumn(name = "id_nhan_vien")
+    private NguoiDung nhanVien;
 }

@@ -1,4 +1,5 @@
 package com.example.demo.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,13 +21,13 @@ public class NguoiDung {
     @Column
     private String avatar;
 
-    @Column
+    @Column(name = "Ten")
     private String ten;
 
-    @Column
+    @Column(name = "Username")
     private String username;
 
-    @Column
+    @Column(name = "Password")
     private String password;
 
     @Column(name = "dia_chi")
@@ -35,8 +36,13 @@ public class NguoiDung {
     @Column(name = "dien_thoai")
     private String dienThoai;
 
+    @Column(name = "gioi_tinh")
+    private String gioiTinh;
+
+    @Column(name = "trang_thai")
+    private boolean trangThai;
+
     @ManyToOne
     @JoinColumn(name = "id_vai_tro")
     private VaiTro vaiTro;
 }
-
