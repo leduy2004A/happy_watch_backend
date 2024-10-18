@@ -63,8 +63,12 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, Lo
     List<ChiTietHoaDonDTO> findAllChiTietHoaDonDTOByIdHoaDon(@Param("idHD") Long idHD);
 
     List<ChiTietHoaDon> findByHoaDonId(Long hoaDonId);
+
+    Optional<ChiTietHoaDon> findByHoaDonIdAndChiTietSanPhamId(Long hoaDonId, Long chiTietSanPhamId);
+
     Page<ChiTietHoaDon> findAll(Pageable pageable);
 
     @Query("SELECT cthd FROM ChiTietHoaDon cthd WHERE cthd.id = :chiTietHoaDonId")
     Optional<ChiTietHoaDon> findChiTietHoaDonById(@Param("chiTietHoaDonId") Long chiTietHoaDonId);
+
 }
