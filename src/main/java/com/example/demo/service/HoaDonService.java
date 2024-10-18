@@ -1,10 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.HoaDonDTO;
-import com.example.demo.model.HoaDon;
-import com.example.demo.model.NguoiDung;
-import com.example.demo.model.ThanhToan;
-import com.example.demo.model.VaiTro;
+import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class HoaDonService {
@@ -32,13 +31,15 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     @Autowired
     private ThanhToanRepository thanhToanRepository;
+    @Autowired
+    private DiaChiRepository diaChiRepository;
 
-    public Page<HoaDonDTO> getAllHoaDonWithDetails(Pageable pageable) {
+    public List<HoaDonDTO> getAllHoaDonWithDetails() {
 
-        Page<HoaDon> hoaDons = hoaDonRepository.findAll(pageable);
+        List<HoaDon> hoaDons = hoaDonRepository.findAll(); // Lấy tất cả hóa đơn
         List<HoaDonDTO> result = new ArrayList<>();
 
-        for (HoaDon hoaDon : hoaDons.getContent()) {
+        for (HoaDon hoaDon : hoaDons) {
             NguoiDung nguoiDung = hoaDon.getNguoiDung();
             VaiTro vaiTro = nguoiDung.getVaiTro();
             ThanhToan thanhToan = hoaDon.getThanhToan();
@@ -49,7 +50,11 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setHoaDonMa(hoaDon.getMa());
             dto.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
             dto.setGia(hoaDon.getGia());
-            dto.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
+            dto.setTinhThanhPho(hoaDon.getTinhThanhPho());
+            dto.setQuanHuyen(hoaDon.getQuanHuyen());
+            dto.setXaPhuongThiTran(hoaDon.getXaPhuongThiTran());
+            dto.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
+            dto.setDienThoai(hoaDon.getDienThoai());
             dto.setNgayTao(hoaDon.getNgayTao());
             dto.setTrangThai(hoaDon.getTrangThai());
 
@@ -57,7 +62,8 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setNguoiDungMa(nguoiDung.getMa());
             dto.setNguoiDungTen(nguoiDung.getTen());
             dto.setNguoiDungUsername(nguoiDung.getUsername());
-            dto.setNguoiDungDienThoai(nguoiDung.getDienThoai());
+
+            List<DiaChi> diaChiList = diaChiRepository.findDiaChiByNguoiDungId(nguoiDung.getId());
 
             dto.setVaiTroId(vaiTro.getId());
             dto.setVaiTroTen(vaiTro.getTenVaiTro());
@@ -72,11 +78,12 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setNguoiTaoTen(nguoiTao.getTen());
             dto.setNguoiTaoUsername(nguoiTao.getUsername());
 
-
             result.add(dto);
         }
-        return new PageImpl<>(result, pageable, hoaDons.getTotalElements());
+
+        return result; // Trả về danh sách DTO
     }
+
 
     public Optional<HoaDonDTO> getHoaDonByMaChiTiet(String maChiTiet) {
         Optional<HoaDon> hoaDonOptional = hoaDonRepository.findByMa(maChiTiet);
@@ -92,7 +99,10 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setHoaDonMa(hoaDon.getMa());
             dto.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
             dto.setGia(hoaDon.getGia());
-            dto.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
+            dto.setTinhThanhPho(hoaDon.getTinhThanhPho());
+            dto.setQuanHuyen(hoaDon.getQuanHuyen());
+            dto.setXaPhuongThiTran(hoaDon.getXaPhuongThiTran());
+            dto.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
             dto.setNgayTao(hoaDon.getNgayTao());
             dto.setTrangThai(hoaDon.getTrangThai());
 
@@ -100,7 +110,11 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setNguoiDungMa(nguoiDung.getMa());
             dto.setNguoiDungTen(nguoiDung.getTen());
             dto.setNguoiDungUsername(nguoiDung.getUsername());
-            dto.setNguoiDungDienThoai(nguoiDung.getDienThoai());
+            dto.setTinhThanhPho(hoaDon.getTinhThanhPho());
+            dto.setQuanHuyen(hoaDon.getQuanHuyen());
+            dto.setXaPhuongThiTran(hoaDon.getXaPhuongThiTran());
+            dto.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
+            dto.setDienThoai(hoaDon.getDienThoai());
 
             dto.setVaiTroId(vaiTro.getId());
             dto.setVaiTroTen(vaiTro.getTenVaiTro());
@@ -115,6 +129,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setNguoiTaoTen(nguoiTao.getTen());
             dto.setNguoiTaoUsername(nguoiTao.getUsername());
 
+
             return Optional.of(dto);
         }
         return Optional.empty();
@@ -122,11 +137,19 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     public Optional<HoaDon> addHoaDon(HoaDon hoaDon) {
         HoaDon hoaDonNew = new HoaDon();
-        hoaDonNew.setMa(hoaDon.getMa());
+
+        String maHoaDon = "HD" + UUID.randomUUID().toString().substring(0, 3);
+        hoaDonNew.setMa(maHoaDon);
         hoaDonNew.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
         hoaDonNew.setGia(BigDecimal.valueOf(0.0));
-        hoaDonNew.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
-        hoaDonNew.setNgayTao(hoaDon.getNgayTao());
+        hoaDonNew.setTinhThanhPho(hoaDon.getTinhThanhPho());
+        hoaDonNew.setGia(hoaDon.getGia());
+        hoaDonNew.setQuanHuyen(hoaDon.getQuanHuyen());
+        hoaDonNew.setXaPhuongThiTran(hoaDon.getXaPhuongThiTran());
+        hoaDonNew.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
+        hoaDonNew.setDienThoai(hoaDon.getDienThoai());
+        LocalDate ngaytao = LocalDate.now();
+        hoaDonNew.setNgayTao(ngaytao);
         hoaDonNew.setTrangThai(hoaDon.getTrangThai());
         hoaDonNew.setThanhToan(hoaDon.getThanhToan());
         hoaDonNew.setNhanVien(hoaDon.getNhanVien());
@@ -134,7 +157,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         // Lưu vào cơ sở dữ liệu
         hoaDonRepository.save(hoaDonNew);
 
-        return Optional.of(hoaDon);
+        return Optional.of(hoaDonNew);
     }
 
 
@@ -188,8 +211,11 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
             existingHoaDon.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
             existingHoaDon.setGia(hoaDon.getGia());
-            existingHoaDon.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
-            existingHoaDon.setNgayTao(hoaDon.getNgayTao());
+            existingHoaDon.setTinhThanhPho(hoaDon.getTinhThanhPho());
+            existingHoaDon.setQuanHuyen(hoaDon.getQuanHuyen());
+            existingHoaDon.setXaPhuongThiTran(hoaDon.getXaPhuongThiTran());
+            existingHoaDon.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
+            existingHoaDon.setDienThoai(hoaDon.getDienThoai());
             existingHoaDon.setTrangThai(hoaDon.getTrangThai());
 
             // Lưu lại hóa đơn đã cập nhật
@@ -214,6 +240,30 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         }
 
         return Optional.empty();
+    }
+
+    public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc) {
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
+                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại với ID: " + hoaDonId));
+        if (tienKhachDua.compareTo(hoaDon.getGia()) >= 0) {
+            ThanhToan thanhToan = new ThanhToan();
+            thanhToan.setMa(UUID.randomUUID().toString());
+            thanhToan.setPhuongThuc(phuongThuc);
+            thanhToan.setSoTien(tienKhachDua);
+            ThanhToan savedThanhToan = thanhToanRepository.save(thanhToan);
+            hoaDon.setTrangThai("Đã Thanh Toán");
+            hoaDon.setThanhToan(savedThanhToan);
+            List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(hoaDonId);
+            for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDonList) {
+                ChiTietSanPham chiTietSanPham = chiTietHoaDon.getChiTietSanPham();
+                int soLuongTru = chiTietHoaDon.getSoLuong();
+                chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() - soLuongTru);
+                chiTietSanPhamRepository.save(chiTietSanPham);
+            }
+            return hoaDonRepository.save(hoaDon);
+        } else {
+            throw new RuntimeException("Số tiền khách đưa không đủ để thanh toán hóa đơn.");
+        }
     }
 
     public HoaDon updateHoaDonWithNguoiDung(Long idHoaDon, Long idNguoiDung) {

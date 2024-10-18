@@ -13,4 +13,7 @@ import java.util.List;
 public interface DiaChiRepository extends JpaRepository<DiaChi, Long> {
     @Query("SELECT dc FROM DiaChi dc WHERE dc.nguoiDung.id IN :nguoiDungIds")
     List<DiaChi> findDiaChiByNguoiDungIds(@RequestParam("nguoiDungIds") List<Long> nguoiDungIds);
+
+    @Query("SELECT dc FROM DiaChi dc WHERE dc.nguoiDung.id = :nguoiDungId")
+    List<DiaChi> findDiaChiByNguoiDungId(@RequestParam("nguoiDungId") Long nguoiDungId);
 }
