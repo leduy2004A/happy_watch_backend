@@ -15,8 +15,6 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
     @Query(value = "select * from nguoi_dung where Username = :username",nativeQuery = true)
     public List<NguoiDung> findNguoiDungByUsername(@Param("username") String username);
     NguoiDung findByUsername(String username);
-    @Query("SELECT n FROM NguoiDung n WHERE n.vaiTro.id = 3")
-    List<NguoiDung> findAllKhachHang();
     @Query("SELECT new com.example.demo.dto.NguoiDungDTO(nd.id, nd.ma, nd.avatar, nd.ten, nd.username, nd.email, " +
             "nd.gioiTinh, nd.trangThai, dc.dienThoai) " +
             "FROM NguoiDung nd " +
