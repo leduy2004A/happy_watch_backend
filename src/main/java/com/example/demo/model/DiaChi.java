@@ -36,5 +36,6 @@ public class DiaChi {
 
     @ManyToOne
     @JoinColumn(name = "id_nguoi_dung")
+
     private NguoiDung nguoiDung;
 }

@@ -137,7 +137,6 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     public Optional<HoaDon> addHoaDon(HoaDon hoaDon) {
         HoaDon hoaDonNew = new HoaDon();
-
         String maHoaDon = "HD" + UUID.randomUUID().toString().substring(0, 3);
         hoaDonNew.setMa(maHoaDon);
         hoaDonNew.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
@@ -150,13 +149,10 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         hoaDonNew.setDienThoai(hoaDon.getDienThoai());
         LocalDate ngaytao = LocalDate.now();
         hoaDonNew.setNgayTao(ngaytao);
-        hoaDonNew.setTrangThai(hoaDon.getTrangThai());
+        hoaDonNew.setTrangThai("Pending Payment");
         hoaDonNew.setThanhToan(hoaDon.getThanhToan());
         hoaDonNew.setNhanVien(hoaDon.getNhanVien());
-
-        // Lưu vào cơ sở dữ liệu
         hoaDonRepository.save(hoaDonNew);
-
         return Optional.of(hoaDonNew);
     }
 
@@ -252,7 +248,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             thanhToan.setPhuongThuc(phuongThuc);
             thanhToan.setSoTien(tienKhachDua);
             ThanhToan savedThanhToan = thanhToanRepository.save(thanhToan);
-            hoaDon.setTrangThai("Đã Thanh Toán");
+            hoaDon.setTrangThai("Paid");
             hoaDon.setThanhToan(savedThanhToan);
             List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(hoaDonId);
             for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDonList) {
@@ -274,5 +270,19 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
         hoaDon.setNguoiDung(nguoiDung);
         return hoaDonRepository.save(hoaDon);
+    }
+
+    public List<HoaDon> getHoaDonsChoThanhToanByNguoiDungId(Long idNguoiDung) {
+        return hoaDonRepository.findHoaDonByNguoiDungIdAndTrangThaiChoThanhToan(idNguoiDung);
+    }
+
+
+    public List<HoaDon> getAllHoaDonsChoThanhToan() {//Nháp
+        return hoaDonRepository.findAllHoaDonChoThanhToan();
+    }
+
+
+    public List<HoaDon> getAllHoaDonsPaid() {
+        return hoaDonRepository.findAllHoaDonPaid();
     }
 }

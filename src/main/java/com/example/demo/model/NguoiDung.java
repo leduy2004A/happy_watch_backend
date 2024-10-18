@@ -36,6 +36,8 @@ public class NguoiDung {
     @Column(name = "trang_thai")
     private boolean trangThai;
 
+    @Column(name = "email")
+    private String email;
     @ManyToOne
     @JoinColumn(name = "id_vai_tro")
     private VaiTro vaiTro;

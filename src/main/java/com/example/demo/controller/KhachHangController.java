@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.NguoiDungDTO;
 import com.example.demo.model.NguoiDung;
 import com.example.demo.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class KhachHangController {
     private KhachHangService nguoiDungService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<NguoiDung>> getAllKhachHang() {
-        List<NguoiDung> khachHangList = nguoiDungService.getAllCustomers();
+    public ResponseEntity<List<NguoiDungDTO>> getAllKhachHang() {
+        List<NguoiDungDTO> khachHangList = nguoiDungService.getAllCustomersWithPhone();
         return ResponseEntity.ok(khachHangList);
     }
 }
