@@ -18,8 +18,8 @@ import java.util.Optional;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/api/hoa-don")
-
+@RequestMapping("/api/hoadon")
+@CrossOrigin()
 public class HoaDonController {
 
     @Autowired

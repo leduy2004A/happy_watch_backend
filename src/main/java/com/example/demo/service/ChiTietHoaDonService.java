@@ -2,10 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ChiTietHoaDonDTO;
 import com.example.demo.model.*;
-import com.example.demo.repository.ChiTietHoaDonRepository;
-import com.example.demo.repository.ChiTietSanPhamRepository;
-import com.example.demo.repository.HinhAnhRepository;
-import com.example.demo.repository.HoaDonRepository;
+import com.example.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +18,8 @@ public class ChiTietHoaDonService {
 
     @Autowired
     private ChiTietHoaDonRepository chiTietHoaDonRepository;
+    @Autowired
+    private KhuyenMaiHoaDonRepository khuyenMaiHoaDonRepository;
     @Autowired
     private HoaDonRepository hoaDonRepository;
     @Autowired
@@ -158,12 +157,48 @@ public class ChiTietHoaDonService {
             result.add(dto);
         }
 
-        // Tạo một map để trả về cả danh sách chi tiết hóa đơn và tổng tiền hóa đơn
+        // Lấy danh sách khuyến mãi từ repository
+        List<KhuyenMaiHoaDon> khuyenMaiList = khuyenMaiHoaDonRepository.findAll();
+
+        // Tìm mã khuyến mãi tốt nhất
+        KhuyenMaiHoaDon khuyenMaiTotNhat = null;
+        BigDecimal giaGiamTotNhat = BigDecimal.ZERO;
+
+        // Duyệt qua danh sách khuyến mãi
+        for (KhuyenMaiHoaDon km : khuyenMaiList) {
+            // Kiểm tra nếu khuyenMaiTuGia không null và tổng tiền đủ điều kiện
+            if (km.getKhuyenMaiTuGia() == null || tongTienHoaDon.compareTo(km.getKhuyenMaiTuGia()) >= 0) {
+                BigDecimal giaGiam = BigDecimal.ZERO;
+
+                // Tính toán số tiền giảm dựa trên phần trăm hoặc số tiền
+                if (km.getPhanTramGiamGia() != null) {
+                    giaGiam = tongTienHoaDon.multiply(BigDecimal.valueOf(km.getPhanTramGiamGia() / 100));
+                } else if (km.getSoTienGiam() != null) {
+                    giaGiam = BigDecimal.valueOf(km.getSoTienGiam());
+                }
+
+                // Cập nhật mã khuyến mãi tốt nhất nếu tìm thấy mức giảm tốt hơn
+                if (giaGiam.compareTo(giaGiamTotNhat) > 0) {
+                    giaGiamTotNhat = giaGiam;
+                    khuyenMaiTotNhat = km;
+                }
+            }
+        }
+
+        // Tạo map để trả về danh sách chi tiết hóa đơn và tổng tiền sau khi áp dụng khuyến mãi
         Map<String, Object> response = new HashMap<>();
         response.put("chiTietHoaDons", result);
         response.put("tongTienHoaDon", tongTienHoaDon);
 
-        return response; // Trả về danh sách ChiTietHoaDonDTO và tổng tiền hóa đơn
+        if (khuyenMaiTotNhat != null) {
+            response.put("maKhuyenMaiTotNhat", khuyenMaiTotNhat.getMa());
+            response.put("giaGiamTotNhat", giaGiamTotNhat);
+            response.put("tongTienSauKhuyenMai", tongTienHoaDon.subtract(giaGiamTotNhat));
+        } else {
+            response.put("tongTienSauKhuyenMai", tongTienHoaDon);
+        }
+
+        return response; // Trả về danh sách chi tiết hóa đơn và tổng tiền hóa đơn sau khuyến mãi
     }
 
 
