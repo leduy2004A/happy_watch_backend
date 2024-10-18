@@ -40,7 +40,7 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, Lo
         JOIN ctsp.sanPham sp
         JOIN cthd.hoaDon hd
     """)
-    Page<ChiTietHoaDonDTO> findAllChiTietHoaDon(Pageable pageable);
+    List<ChiTietHoaDonDTO> findAllChiTietHoaDon();
 
     @Query("""
     SELECT new com.example.demo.dto.ChiTietHoaDonDTO(cthd.id, hd.id, hd.gia, sp.id, sp.ma, sp.ten, sp.gia, sp.khuyenMai.id, ctsp.id, ctsp.ma, ctsp.chatLieuDay.ten, ctsp.chatLieuVo.ten, ctsp.hinhDang.ten, ctsp.loaiKinh.ten, ctsp.loaiMay.ten, ctsp.mauSac.ten, cthd.soLuong, cthd.giaTungSanPham) 

@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ChiTietHoaDonDTO;
 import com.example.demo.dto.HoaDonDTO;
 import com.example.demo.model.HoaDon;
+import com.example.demo.service.ChiTietHoaDonService;
 import com.example.demo.service.HoaDonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.math.BigDecimal;
 
@@ -21,7 +24,8 @@ public class HoaDonController {
 
     @Autowired
     private HoaDonService hoaDonService;
-
+    @Autowired
+    private ChiTietHoaDonService chiTietHoaDonService;
     @PutMapping("/update-status/{id}")
     public ResponseEntity<HoaDon> updateHoaDonStatusToPaid(
             @PathVariable Long id,
@@ -43,7 +47,17 @@ public class HoaDonController {
             List<HoaDonDTO> hoaDonList = hoaDonService.getAllHoaDonWithDetails();
             return ResponseEntity.ok(hoaDonList);
         }
+    @GetMapping("/all-sp")
+    public ResponseEntity<Map<String, Object>> getAllChiTietHoaDon(@RequestParam("idHD") Long idHD) {
+        // Gọi phương thức trong service để lấy danh sách chi tiết hóa đơn và tổng tiền
+        Map<String, Object> chiTietHoaDonData = chiTietHoaDonService.getChiTietHoaDon(idHD);
 
+        if (((List<ChiTietHoaDonDTO>) chiTietHoaDonData.get("chiTietHoaDons")).isEmpty()) {
+            return ResponseEntity.notFound().build(); // Nếu danh sách trống, trả về 404 Not Found
+        }
+
+        return ResponseEntity.ok(chiTietHoaDonData); // Trả về dữ liệu gồm chi tiết hóa đơn và tổng tiền
+    }
         @GetMapping("/chi-tiet")
         public ResponseEntity<HoaDonDTO> getHoaDonByMaChiTiet (@RequestParam String maHoaDon){
             Optional<HoaDonDTO> hoaDonDTOOptional = hoaDonService.getHoaDonByMaChiTiet(maHoaDon);
