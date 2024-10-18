@@ -51,10 +51,20 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, Lo
     WHERE cthd.id = :id
 """)
     Optional<ChiTietHoaDonDTO> findChiTietHoaDonDTOById(@Param("id") Long id);
+
+    @Query(""" 
+    SELECT new com.example.demo.dto.ChiTietHoaDonDTO(cthd.id, hd.id, hd.gia, sp.id, sp.ma, sp.ten, sp.gia, sp.khuyenMai.id, ctsp.id, ctsp.ma, ctsp.chatLieuDay.ten, ctsp.chatLieuVo.ten, ctsp.hinhDang.ten, ctsp.loaiKinh.ten, ctsp.loaiMay.ten, ctsp.mauSac.ten, cthd.soLuong, cthd.giaTungSanPham) 
+    FROM ChiTietHoaDon cthd
+    JOIN ChiTietSanPham ctsp ON cthd.chiTietSanPham.id = ctsp.id
+    JOIN SanPham sp ON ctsp.sanPham.id = sp.id
+    JOIN HoaDon hd ON cthd.hoaDon.id = hd.id
+    WHERE hd.id = :idHD
+""")
+    List<ChiTietHoaDonDTO> findAllChiTietHoaDonDTOByIdHoaDon(@Param("idHD") Long idHD);
+
     List<ChiTietHoaDon> findByHoaDonId(Long hoaDonId);
     Page<ChiTietHoaDon> findAll(Pageable pageable);
 
     @Query("SELECT cthd FROM ChiTietHoaDon cthd WHERE cthd.id = :chiTietHoaDonId")
     Optional<ChiTietHoaDon> findChiTietHoaDonById(@Param("chiTietHoaDonId") Long chiTietHoaDonId);
-
 }
