@@ -37,45 +37,45 @@ public class HoaDonController {
         HoaDon updatedHoaDon = hoaDonService.updateHoaDonWithNguoiDung(idHoaDon, idNguoiDung);
         return ResponseEntity.ok(updatedHoaDon);
     }
-        @GetMapping("/all")
-        public ResponseEntity<Page<HoaDonDTO>> getAllHoaDonWithDetails (
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size){
-            Pageable pageable = PageRequest.of(page, size);
-            Page<HoaDonDTO> hoaDonList = hoaDonService.getAllHoaDonWithDetails(pageable);
-            return ResponseEntity.ok(hoaDonList);
-        }
-
-        @GetMapping("/chi-tiet")
-        public ResponseEntity<HoaDonDTO> getHoaDonByMaChiTiet (@RequestParam String maHoaDon){
-            Optional<HoaDonDTO> hoaDonDTOOptional = hoaDonService.getHoaDonByMaChiTiet(maHoaDon);
-            return hoaDonDTOOptional
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
-        }
-
-        @PostMapping("/add")
-        public ResponseEntity<HoaDon> addHoaDon (@RequestBody HoaDon hoaDon){
-            Optional<HoaDon> hoaDonOptional = hoaDonService.addHoaDon(hoaDon);
-            return hoaDonOptional
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
-        }
-
-        @PutMapping("/update")
-        public ResponseEntity<HoaDon> updateHoaDon (@RequestBody HoaDon hoaDon){
-            Optional<HoaDon> hoaDonOptional = hoaDonService.updateHoaDon(hoaDon);
-            return hoaDonOptional
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
-        }
-
-        @DeleteMapping("/delete")
-        public ResponseEntity<HoaDon> deleteHoaDonByMaChiTiet (@RequestParam String maHoaDon){
-            Optional<HoaDon> hoaDonOptional = hoaDonService.deleteHoaDon(maHoaDon);
-            return hoaDonOptional
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
-
-        }
+//        @GetMapping("/all")
+//        public ResponseEntity<Page<HoaDonDTO>> getAllHoaDonWithDetails (
+//        @RequestParam(defaultValue = "0") int page,
+//        @RequestParam(defaultValue = "5") int size){
+//            Pageable pageable = PageRequest.of(page, size);
+//            Page<HoaDonDTO> hoaDonList = hoaDonService.getAllHoaDonWithDetails(pageable);
+//            return ResponseEntity.ok(hoaDonList);
+//        }
+//
+//        @GetMapping("/chi-tiet")
+//        public ResponseEntity<HoaDonDTO> getHoaDonByMaChiTiet (@RequestParam String maHoaDon){
+//            Optional<HoaDonDTO> hoaDonDTOOptional = hoaDonService.getHoaDonByMaChiTiet(maHoaDon);
+//            return hoaDonDTOOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//        }
+//
+//        @PostMapping("/add")
+//        public ResponseEntity<HoaDon> addHoaDon (@RequestBody HoaDon hoaDon){
+//            Optional<HoaDon> hoaDonOptional = hoaDonService.addHoaDon(hoaDon);
+//            return hoaDonOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//        }
+//
+//        @PutMapping("/update")
+//        public ResponseEntity<HoaDon> updateHoaDon (@RequestBody HoaDon hoaDon){
+//            Optional<HoaDon> hoaDonOptional = hoaDonService.updateHoaDon(hoaDon);
+//            return hoaDonOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//        }
+//
+//        @DeleteMapping("/delete")
+//        public ResponseEntity<HoaDon> deleteHoaDonByMaChiTiet (@RequestParam String maHoaDon){
+//            Optional<HoaDon> hoaDonOptional = hoaDonService.deleteHoaDon(maHoaDon);
+//            return hoaDonOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//
+//        }
     }

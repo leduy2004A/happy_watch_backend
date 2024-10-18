@@ -25,4 +25,7 @@ public class ThanhToan {
 
     @Column(name = "so_tien")
     private BigDecimal soTien;
+
+    @Column(name = "ma_giao_dich")
+    private String  maGiaoDich;
 }

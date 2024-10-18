@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
+
 
 @Entity
 @Data
@@ -32,9 +32,20 @@ public class HoaDon {
     @Column(name = "Gia")
     private BigDecimal gia;
 
-    @Column(name = "Dia_chi_giao_hang")
-    private String diaChiGiaoHang;
+    @Column(name = "tinh_thanh_pho")
+    private String tinhThanhPho;
 
+    @Column(name = "quan_huyen")
+    private String quanHuyen;
+
+    @Column(name = "xa_phuong_thi_tran")
+    private String xaPhuongThiTran;
+
+    @Column(name = "dia_chi_cu_the")
+    private String diaChiCuThe;
+
+    @Column(name = "dien_thoai")
+    private String dienThoai;
     @Column(name = "Ngay_tao")
     private LocalDate ngayTao;
 
