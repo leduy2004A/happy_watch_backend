@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.math.BigDecimal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,18 +9,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.GioHang;
-import com.example.demo.repository.ChiTietGioHangRepository;
 import com.example.demo.repository.GioHangRepository;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api/carts")
@@ -55,7 +55,7 @@ public class GioHangController {
     @PostMapping
     public ResponseEntity<GioHang> saveCart(@RequestBody GioHang gioHang) {
         gioHang.setId(Long.valueOf(0));
-        gioHang.setTongGia(Double.valueOf(0));
+        gioHang.setTongGia(BigDecimal.valueOf(0));
         gioHang.setTongSoLuong(Integer.valueOf(0));
         return ResponseEntity.ok(gioHangRepository.save(gioHang));
     }

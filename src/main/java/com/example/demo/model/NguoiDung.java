@@ -30,12 +30,6 @@ public class NguoiDung {
     @Column(name = "Password")
     private String password;
 
-    @Column(name = "dia_chi")
-    private String diaChi;
-
-    @Column(name = "dien_thoai")
-    private String dienThoai;
-
     @Column(name = "gioi_tinh")
     private String gioiTinh;
 

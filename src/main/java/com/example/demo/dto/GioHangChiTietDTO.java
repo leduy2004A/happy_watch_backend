@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,7 @@ public class GioHangChiTietDTO {
     private Long idSanPhamChiTiet;
     private Long idGioHang;
     private Integer soLuong;
-    private Double giaTungSanPham;
+    private BigDecimal giaTungSanPham;
     private String tenSanPham;
     private String maSanPham;
     private String maGioHang;
