@@ -15,7 +15,7 @@ public class VaiTro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Ten_vai_tro")
+    @Column(name = "ten_vai_tro")
     private String tenVaiTro;
 
 

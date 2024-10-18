@@ -55,6 +55,7 @@ public class ChiTietSanPham {
     @ManyToOne
     @JoinColumn(name = "id_hinh_dang")
     private HinhDang hinhDang;
+
     @Column(name = "so_luong")
     private int soLuong;
 }

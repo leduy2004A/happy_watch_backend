@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.KhuyenMaiDTO;
 import com.example.demo.model.KhuyenMai;
 import com.example.demo.service.KhuyenMaiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,9 @@ public class KhuyenMaiController {
     }
 
     // Cập nhật khuyến mãi
-    @PutMapping("/update/{id}")
-    public ResponseEntity<KhuyenMai> updateKhuyenMai(@PathVariable Long id, @RequestBody KhuyenMai khuyenMai) {
-        KhuyenMai updatedKhuyenMai = khuyenMaiService.updateKhuyenMai(id, khuyenMai);
+    @PutMapping("/update/{ma}")
+    public ResponseEntity<KhuyenMai> updateKhuyenMai(@PathVariable String ma, @RequestBody KhuyenMai khuyenMai) {
+        KhuyenMai updatedKhuyenMai = khuyenMaiService.updateKhuyenMaiByMa(ma, khuyenMai);
         if (updatedKhuyenMai != null) {
             return new ResponseEntity<>(updatedKhuyenMai, HttpStatus.OK);
         } else {
@@ -53,5 +54,11 @@ public class KhuyenMaiController {
         }
     }
 
+    // Thêm mới khuyến mãi cho nhiều sản phẩm cùng lúc
+    @PostMapping("/create")
+    public ResponseEntity<KhuyenMai> createKhuyenMai(@RequestBody KhuyenMaiDTO khuyenMaiDTO) {
+        KhuyenMai khuyenMai = khuyenMaiService.createKhuyenMai(khuyenMaiDTO);
+        return new ResponseEntity<>(khuyenMai, HttpStatus.CREATED);
+    }
 }
 

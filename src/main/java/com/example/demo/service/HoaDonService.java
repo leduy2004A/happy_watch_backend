@@ -5,9 +5,7 @@ import com.example.demo.model.HoaDon;
 import com.example.demo.model.NguoiDung;
 import com.example.demo.model.ThanhToan;
 import com.example.demo.model.VaiTro;
-import com.example.demo.repository.HoaDonRepository;
-import com.example.demo.repository.NguoiDungRepository;
-import com.example.demo.repository.ThanhToanRepository;
+import com.example.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,15 +14,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class HoaDonService {
-
+@Autowired
+private ChiTietSanPhamRepository chiTietSanPhamRepository;
+@Autowired
+private ChiTietHoaDonRepository chiTietHoaDonRepository;
     @Autowired
     private HoaDonRepository hoaDonRepository;
 
@@ -123,19 +122,11 @@ public class HoaDonService {
 
     public Optional<HoaDon> addHoaDon(HoaDon hoaDon) {
         HoaDon hoaDonNew = new HoaDon();
-        hoaDonNew.setId(hoaDon.getId());
-
-
-        String maHoaDon = "HD" + UUID.randomUUID().toString().substring(0, 3); // Tạo mã hóa đơn với số định dạng 5 chữ số
-
-        hoaDonNew.setMa(maHoaDon);
+        hoaDonNew.setMa(hoaDon.getMa());
         hoaDonNew.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
         hoaDonNew.setGia(BigDecimal.valueOf(0.0));
         hoaDonNew.setDiaChiGiaoHang(hoaDon.getDiaChiGiaoHang());
-
-        LocalDate ngaytao = LocalDate.now();
-
-        hoaDonNew.setNgayTao(ngaytao);
+        hoaDonNew.setNgayTao(hoaDon.getNgayTao());
         hoaDonNew.setTrangThai(hoaDon.getTrangThai());
         hoaDonNew.setThanhToan(hoaDon.getThanhToan());
         hoaDonNew.setNhanVien(hoaDon.getNhanVien());
@@ -143,10 +134,8 @@ public class HoaDonService {
         // Lưu vào cơ sở dữ liệu
         hoaDonRepository.save(hoaDonNew);
 
-        return Optional.of(hoaDonNew);
+        return Optional.of(hoaDon);
     }
-
-
 
 
 
@@ -227,4 +216,12 @@ public class HoaDonService {
         return Optional.empty();
     }
 
+    public HoaDon updateHoaDonWithNguoiDung(Long idHoaDon, Long idNguoiDung) {
+        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
+                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
+        NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+        hoaDon.setNguoiDung(nguoiDung);
+        return hoaDonRepository.save(hoaDon);
+    }
 }

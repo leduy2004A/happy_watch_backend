@@ -11,25 +11,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "dia_chi")
 public class DiaChi {
-    //CREATE TABLE dia_chi (
-    //    Id INT PRIMARY KEY IDENTITY(1,1),
-    //    Ma NVARCHAR(50) NOT NULL,
-    //    dia_chi NVARCHAR(100) NOT NULL,
-    //	Id_nguoi_dung INT FOREIGN KEY REFERENCES nguoi_dung(Id)
-    //);
-
     @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Ma")
+    @Column(name = "ma", nullable = false)
     private String ma;
 
-    @Column(name = "Ten_nguoi_nhan")
-    private String diaChi;
+    @Column(name = "tinh_thanh_pho")
+    private String tinhThanhPho;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "Id_nguoi_dung")
+    @Column(name = "quan_huyen")
+    private String quanHuyen;
+
+    @Column(name = "xa_phuong_thi_tran")
+    private String xaPhuongThiTran;
+
+    @Column(name = "dia_chi_cu_the")
+    private String diaChiCuThe;
+
+    @ManyToOne
+    @JoinColumn(name = "id_nguoi_dung")
+
     private NguoiDung nguoiDung;
 }

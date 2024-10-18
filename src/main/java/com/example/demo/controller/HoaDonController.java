@@ -11,53 +11,71 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/api/hoadon")
+@RequestMapping("/api/hoa-don")
+
 public class HoaDonController {
 
     @Autowired
     private HoaDonService hoaDonService;
 
-    @GetMapping("/all")
-    public ResponseEntity<Page<HoaDonDTO>> getAllHoaDonWithDetails(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<HoaDonDTO> hoaDonList = hoaDonService.getAllHoaDonWithDetails(pageable);
-        return ResponseEntity.ok(hoaDonList);
+    @PutMapping("/update-status/{id}")
+    public ResponseEntity<HoaDon> updateHoaDonStatusToPaid(
+            @PathVariable Long id,
+            @RequestParam BigDecimal tienKhachDua,
+            @RequestParam String phuongThuc) {
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc);
+        return ResponseEntity.ok(updatedHoaDon);
     }
 
-    @GetMapping("/chi-tiet")
-    public ResponseEntity<HoaDonDTO> getHoaDonByMaChiTiet(@RequestParam String maHoaDon) {
-        Optional<HoaDonDTO> hoaDonDTOOptional = hoaDonService.getHoaDonByMaChiTiet(maHoaDon);
-        return hoaDonDTOOptional
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @PutMapping("/update/khach-hang/{idHoaDon}")
+    public ResponseEntity<HoaDon> updateHoaDon(
+            @PathVariable Long idHoaDon,
+            @RequestParam Long idNguoiDung) {
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonWithNguoiDung(idHoaDon, idNguoiDung);
+        return ResponseEntity.ok(updatedHoaDon);
     }
-
-    @PostMapping("/add")
-    public ResponseEntity<HoaDon> addHoaDon(@RequestBody HoaDon hoaDon) {
-        Optional<HoaDon> hoaDonOptional = hoaDonService.addHoaDon(hoaDon);
-        return hoaDonOptional
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+//        @GetMapping("/all")
+//        public ResponseEntity<Page<HoaDonDTO>> getAllHoaDonWithDetails (
+//        @RequestParam(defaultValue = "0") int page,
+//        @RequestParam(defaultValue = "5") int size){
+//            Pageable pageable = PageRequest.of(page, size);
+//            Page<HoaDonDTO> hoaDonList = hoaDonService.getAllHoaDonWithDetails(pageable);
+//            return ResponseEntity.ok(hoaDonList);
+//        }
+//
+//        @GetMapping("/chi-tiet")
+//        public ResponseEntity<HoaDonDTO> getHoaDonByMaChiTiet (@RequestParam String maHoaDon){
+//            Optional<HoaDonDTO> hoaDonDTOOptional = hoaDonService.getHoaDonByMaChiTiet(maHoaDon);
+//            return hoaDonDTOOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//        }
+//
+//        @PostMapping("/add")
+//        public ResponseEntity<HoaDon> addHoaDon (@RequestBody HoaDon hoaDon){
+//            Optional<HoaDon> hoaDonOptional = hoaDonService.addHoaDon(hoaDon);
+//            return hoaDonOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//        }
+//
+//        @PutMapping("/update")
+//        public ResponseEntity<HoaDon> updateHoaDon (@RequestBody HoaDon hoaDon){
+//            Optional<HoaDon> hoaDonOptional = hoaDonService.updateHoaDon(hoaDon);
+//            return hoaDonOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//        }
+//
+//        @DeleteMapping("/delete")
+//        public ResponseEntity<HoaDon> deleteHoaDonByMaChiTiet (@RequestParam String maHoaDon){
+//            Optional<HoaDon> hoaDonOptional = hoaDonService.deleteHoaDon(maHoaDon);
+//            return hoaDonOptional
+//                    .map(ResponseEntity::ok)
+//                    .orElseGet(() -> ResponseEntity.notFound().build());
+//
+//        }
     }
-
-    @PutMapping("/update")
-    public ResponseEntity<HoaDon> updateHoaDon(@RequestBody HoaDon hoaDon) {
-        Optional<HoaDon> hoaDonOptional = hoaDonService.updateHoaDon(hoaDon);
-        return hoaDonOptional
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<HoaDon> deleteHoaDonByMaChiTiet(@RequestParam String maHoaDon) {
-        Optional<HoaDon> hoaDonOptional = hoaDonService.deleteHoaDon(maHoaDon);
-        return hoaDonOptional
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-}
