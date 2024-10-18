@@ -138,13 +138,28 @@ public class HoaDonController {
     }
 
     // cập nhật trạng thái hóa đơn thành đã xác nhận
-    @PutMapping("/confirm/{id}")
-    public ResponseEntity<String> confirmHoaDon(@PathVariable Long id) {
-        boolean isUpdated = hoaDonService.confirmHoaDon(id);
+    @PutMapping("/confirm-with-address/{idHoaDon}")
+    public ResponseEntity<String> confirmHoaDonWithAddress(
+            @PathVariable Long idHoaDon,
+            @RequestParam String tinhThanhPho,
+            @RequestParam String quanHuyen,
+            @RequestParam String xaPhuongThiTran,
+            @RequestParam String diaChiCuThe,
+            @RequestParam String dienThoai) {
+
+        boolean isUpdated = hoaDonService.confirmHoaDonWithAddress(
+                idHoaDon,
+                tinhThanhPho,
+                quanHuyen,
+                xaPhuongThiTran,
+                diaChiCuThe,
+                dienThoai
+        );
+
         if (isUpdated) {
-            return ResponseEntity.ok("Hóa đơn đã được xác nhận thành công.");
+            return ResponseEntity.ok("Hóa đơn đã được xác nhận và địa chỉ đã được cập nhật.");
         } else {
-            return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật.");
+            return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật địa chỉ.");
         }
     }
 }
