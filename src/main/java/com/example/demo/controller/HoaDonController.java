@@ -130,9 +130,21 @@ public class HoaDonController {
         }
     }
 
+    // hiển thị hóa đơn đã hủy
     @GetMapping("/cancelled")
     public ResponseEntity<List<HoaDon>> getAllHoaDonCancelled() {
         List<HoaDon> hoaDonList = hoaDonService.getAllHoaDonsCancelled();
         return ResponseEntity.ok(hoaDonList);
+    }
+
+    // cập nhật trạng thái hóa đơn thành đã xác nhận
+    @PutMapping("/confirm/{id}")
+    public ResponseEntity<String> confirmHoaDon(@PathVariable Long id) {
+        boolean isUpdated = hoaDonService.confirmHoaDon(id);
+        if (isUpdated) {
+            return ResponseEntity.ok("Hóa đơn đã được xác nhận thành công.");
+        } else {
+            return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật.");
+        }
     }
 }

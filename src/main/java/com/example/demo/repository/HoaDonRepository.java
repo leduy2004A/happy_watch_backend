@@ -44,4 +44,10 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     //lấy tất cả các hóa đơn có trạng thái đã hủy
     @Query("SELECT hd FROM HoaDon hd WHERE hd.trangThai = 'Cancelled'")
     List<HoaDon> findAllHoaDonCancelled();
+
+    // Cập nhật trạng thái của hóa đơn thành "Confirmed"
+    @Modifying
+    @Transactional
+    @Query("UPDATE HoaDon hd SET hd.trangThai = 'Confirmed' WHERE hd.id = :id")
+    int updateTrangThaiHoaDonToConfirmed(@Param("id") Long id);
 }

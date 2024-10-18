@@ -299,4 +299,11 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
     public List<HoaDon> getAllHoaDonsCancelled() {
         return hoaDonRepository.findAllHoaDonCancelled();
     }
+
+    // Phương thức cập nhật trạng thái hóa đơn thành "Confirmed"
+    @Transactional
+    public boolean confirmHoaDon(Long id) {
+        int updatedRows = hoaDonRepository.updateTrangThaiHoaDonToConfirmed(id);
+        return updatedRows > 0;
+    }
 }
