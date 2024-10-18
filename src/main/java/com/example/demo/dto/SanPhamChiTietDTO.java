@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SanPhamChiTietDTO {
     private Long sanPhamId;
+    private Long chiTietSanPhamId;
     private String maSanPham;
     private List<String> hinhAnh;
     private String tenSanPham;

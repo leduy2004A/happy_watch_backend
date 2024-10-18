@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/hoadon")
-
+@CrossOrigin()
 public class HoaDonController {
 
     @Autowired

@@ -136,6 +136,7 @@ public class SanPhamService {
         dto.setGioiTinh(sanPham.getGioiTinh().getTen());
         dto.setXuatXu(chiTietSanPham.getXuatXu());
         dto.setBaoHanh(chiTietSanPham.getBaoHanh());
+        dto.setChiTietSanPhamId(chiTietSanPham.getId());
         return dto;
     }
 
