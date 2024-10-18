@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -58,4 +60,7 @@ public class ChiTietSanPham {
 
     @Column(name = "so_luong")
     private int soLuong;
+
+    @Column(name = "gia")
+    private BigDecimal gia;
 }

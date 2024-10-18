@@ -58,7 +58,6 @@ public class HoaDonController {
         if (((List<ChiTietHoaDonDTO>) chiTietHoaDonData.get("chiTietHoaDons")).isEmpty()) {
             return ResponseEntity.notFound().build(); // Nếu danh sách trống, trả về 404 Not Found
         }
-
         return ResponseEntity.ok(chiTietHoaDonData); // Trả về dữ liệu gồm chi tiết hóa đơn và tổng tiền
     }
 
