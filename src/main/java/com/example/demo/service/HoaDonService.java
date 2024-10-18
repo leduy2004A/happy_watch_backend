@@ -4,6 +4,7 @@ import com.example.demo.dto.HoaDonDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -284,5 +285,25 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     public List<HoaDon> getAllHoaDonsPaid() {
         return hoaDonRepository.findAllHoaDonPaid();
+    }
+
+
+    // huủy hóa đơn
+    @Transactional
+    public boolean cancelHoaDon(Long id) {
+        int updatedRows = hoaDonRepository.updateTrangThaiHoaDonToCancelled(id);
+        return updatedRows > 0; // Trả về true nếu cập nhật thành công
+    }
+
+    // lấy tất cả hóa đơn có trạng thái đã hủy
+    public List<HoaDon> getAllHoaDonsCancelled() {
+        return hoaDonRepository.findAllHoaDonCancelled();
+    }
+
+    // Phương thức cập nhật trạng thái hóa đơn thành "Confirmed"
+    @Transactional
+    public boolean confirmHoaDon(Long id) {
+        int updatedRows = hoaDonRepository.updateTrangThaiHoaDonToConfirmed(id);
+        return updatedRows > 0;
     }
 }

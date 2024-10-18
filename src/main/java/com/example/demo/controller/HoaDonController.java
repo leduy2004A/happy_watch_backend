@@ -117,4 +117,34 @@ public class HoaDonController {
         List<HoaDon> hoaDonList = hoaDonService.getAllHoaDonsPaid();
         return ResponseEntity.ok(hoaDonList);
     }
+
+
+    // cập nhật trạng thái hóa đơn thành "Cancelled"
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelHoaDon(@PathVariable Long id) {
+        boolean isUpdated = hoaDonService.cancelHoaDon(id);
+        if (isUpdated) {
+            return ResponseEntity.ok("Hóa đơn đã được hủy thành công.");
+        } else {
+            return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật.");
+        }
+    }
+
+    // hiển thị hóa đơn đã hủy
+    @GetMapping("/cancelled")
+    public ResponseEntity<List<HoaDon>> getAllHoaDonCancelled() {
+        List<HoaDon> hoaDonList = hoaDonService.getAllHoaDonsCancelled();
+        return ResponseEntity.ok(hoaDonList);
+    }
+
+    // cập nhật trạng thái hóa đơn thành đã xác nhận
+    @PutMapping("/confirm/{id}")
+    public ResponseEntity<String> confirmHoaDon(@PathVariable Long id) {
+        boolean isUpdated = hoaDonService.confirmHoaDon(id);
+        if (isUpdated) {
+            return ResponseEntity.ok("Hóa đơn đã được xác nhận thành công.");
+        } else {
+            return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật.");
+        }
+    }
 }
