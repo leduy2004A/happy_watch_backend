@@ -276,6 +276,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         return hoaDonRepository.findHoaDonByNguoiDungIdAndTrangThaiChoThanhToan(idNguoiDung);
     }
 
+
     public List<HoaDon> getAllHoaDonsChoThanhToan() {//Nháp
         return hoaDonRepository.findAllHoaDonChoThanhToan();
     }

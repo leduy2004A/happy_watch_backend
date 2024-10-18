@@ -30,7 +30,6 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Query("SELECT hd FROM HoaDon hd WHERE hd.trangThai = 'Pending Payment'")//nháp sau xóa
     List<HoaDon> findAllHoaDonChoThanhToan();
 
-
     //hiển thị hóa đơn đã thanh toán
     @Query("SELECT hd FROM HoaDon hd WHERE hd.trangThai = 'Paid'")
     List<HoaDon> findAllHoaDonPaid();

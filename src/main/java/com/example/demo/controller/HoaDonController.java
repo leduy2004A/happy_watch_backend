@@ -111,6 +111,7 @@ public class HoaDonController {
     }
 
     //hiển thị hóa đơn đã thanh toán
+
     @GetMapping("/paid")
     public ResponseEntity<List<HoaDon>> getAllHoaDonPaid() {
         List<HoaDon> hoaDonList = hoaDonService.getAllHoaDonsPaid();
