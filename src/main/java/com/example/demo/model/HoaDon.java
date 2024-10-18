@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-
 @Entity
 @Data
 @AllArgsConstructor
@@ -44,8 +43,9 @@ public class HoaDon {
     @Column(name = "dia_chi_cu_the")
     private String diaChiCuThe;
 
-    @Column(name = "dien_thoai")
+    @Column(name = "Dien_thoai")
     private String dienThoai;
+
     @Column(name = "Ngay_tao")
     private LocalDate ngayTao;
 
@@ -59,4 +59,7 @@ public class HoaDon {
     @ManyToOne
     @JoinColumn(name = "id_nhan_vien")
     private NguoiDung nhanVien;
+    @ManyToOne
+    @JoinColumn(name = "id_khuyen_mai_hoa_don")
+    private KhuyenMaiHoaDon khuyenMaiHoaDon;
 }

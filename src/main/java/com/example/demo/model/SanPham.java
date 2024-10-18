@@ -48,6 +48,7 @@ public class SanPham {
     @ManyToOne
     @JoinColumn(name = "id_gioi_tinh")
     private GioiTinh gioiTinh;
+
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChiTietSanPham> chiTietSanPhams;
 }
