@@ -30,7 +30,7 @@ public class HoaDonDTO {
     private String nguoiDungMa;
     private String nguoiDungTen;
     private String nguoiDungUsername;
-
+    private Integer tongCanNang;
     private Long vaiTroId;
     private String vaiTroTen;
 

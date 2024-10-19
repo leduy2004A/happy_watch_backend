@@ -58,7 +58,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setDienThoai(hoaDon.getDienThoai());
             dto.setNgayTao(hoaDon.getNgayTao());
             dto.setTrangThai(hoaDon.getTrangThai());
-
+            dto.setTongCanNang(tinhTongCanNang(hoaDon.getId()));
             dto.setNguoiDungId(nguoiDung.getId());
             dto.setNguoiDungMa(nguoiDung.getMa());
             dto.setNguoiDungTen(nguoiDung.getTen());
@@ -106,7 +106,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
             dto.setNgayTao(hoaDon.getNgayTao());
             dto.setTrangThai(hoaDon.getTrangThai());
-
+            dto.setTongCanNang(tinhTongCanNang(hoaDon.getId()));
             dto.setNguoiDungId(nguoiDung.getId());
             dto.setNguoiDungMa(nguoiDung.getMa());
             dto.setNguoiDungTen(nguoiDung.getTen());
@@ -208,13 +208,14 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
             existingHoaDon.setTenNguoiNhan(hoaDon.getTenNguoiNhan());
             existingHoaDon.setGia(hoaDon.getGia());
+            existingHoaDon.setTongCanNang(hoaDon.getTongCanNang());
             existingHoaDon.setTinhThanhPho(hoaDon.getTinhThanhPho());
             existingHoaDon.setQuanHuyen(hoaDon.getQuanHuyen());
             existingHoaDon.setXaPhuongThiTran(hoaDon.getXaPhuongThiTran());
             existingHoaDon.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
             existingHoaDon.setDienThoai(hoaDon.getDienThoai());
             existingHoaDon.setTrangThai(hoaDon.getTrangThai());
-
+            existingHoaDon.setTongCanNang(hoaDon.getTongCanNang());
             // Lưu lại hóa đơn đã cập nhật
             hoaDonRepository.save(existingHoaDon);
 
@@ -313,5 +314,19 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 dienThoai
         );
         return updatedRows > 0; // Trả về true nếu cập nhật thành công
+    }
+
+    public int tinhTongCanNang(Long idHoaDon) {
+        Optional<HoaDon> hoaDonOpt = hoaDonRepository.findById(idHoaDon);
+
+        if (hoaDonOpt.isPresent()) {
+            HoaDon hoaDon = hoaDonOpt.get();
+            return hoaDon.getChiTietHoaDonList()
+                    .stream()
+                    .mapToInt(cthd -> cthd.getChiTietSanPham().getCanNang() * cthd.getSoLuong())
+                    .sum();
+        } else {
+            throw new EntityNotFoundException("Không tìm thấy hóa đơn với ID: " + idHoaDon);
+        }
     }
 }

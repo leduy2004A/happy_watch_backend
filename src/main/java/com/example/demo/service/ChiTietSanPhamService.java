@@ -43,6 +43,7 @@ public class ChiTietSanPhamService {
             existingChiTietSanPham.setXuatXu(chiTietSanPhamUpdate.getXuatXu());
             existingChiTietSanPham.setBaoHanh(chiTietSanPhamUpdate.getBaoHanh());
             existingChiTietSanPham.setSoLuong(chiTietSanPhamUpdate.getSoLuong());
+            existingChiTietSanPham.setCanNang(chiTietSanPhamUpdate.getCanNang());
             return chiTietSanPhamRepository.save(existingChiTietSanPham);
         } else {
             throw new RuntimeException("Chi tiết sản phẩm không tồn tại với mã: " + maChiTietSanPham);

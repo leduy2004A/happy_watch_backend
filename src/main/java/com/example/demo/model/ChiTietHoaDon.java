@@ -28,6 +28,8 @@ public class ChiTietHoaDon {
     @Column(name = "So_luong")
     private Integer soLuong;
 
+    @Column(name = "can_nang")
+    private Integer canNang;
     @Column(name = "Gia_tung_san_pham")
     private BigDecimal giaTungSanPham;
 }
