@@ -29,11 +29,12 @@ public class HoaDonController {
             @PathVariable Long id,
             @RequestParam BigDecimal tienKhachDua,
             @RequestParam String phuongThuc,
-            @RequestParam String tenKhachHang) {
-
-        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, tenKhachHang);
+            @RequestParam String tenKhachHang,
+            @RequestParam BigDecimal gia) {
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, tenKhachHang, gia);
         return ResponseEntity.ok(updatedHoaDon);
     }
+
 
     @PutMapping("/update/khach-hang/{idHoaDon}")
     public ResponseEntity<HoaDon> updateHoaDon(
