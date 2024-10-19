@@ -1,4 +1,5 @@
 package com.example.demo.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -68,5 +69,6 @@ public class HoaDon {
     private KhuyenMaiHoaDon khuyenMaiHoaDon;
 
     @OneToMany(mappedBy = "hoaDon")
+    @JsonIgnore
     private List<ChiTietHoaDon> chiTietHoaDonList;
 }
