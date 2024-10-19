@@ -128,7 +128,6 @@ public class ChiTietHoaDonService {
             BigDecimal slsp = BigDecimal.valueOf(chiTietHoaDon.getSoLuong());
             BigDecimal giasp = chiTietHoaDon.getGiaTungSanPham();
             BigDecimal tongTienChiTiet = slsp.multiply(giasp);
-
             dto.setTongTienChiTietHoaDon(tongTienChiTiet);
             dto.setSanPhamId(chiTietHoaDon.getSanPhamId());
             dto.setMaSanPham(chiTietHoaDon.getMaSanPham());
@@ -145,7 +144,6 @@ public class ChiTietHoaDonService {
             dto.setMauSacSanPham(chiTietHoaDon.getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDon.getSoLuong());
             dto.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
-
             // Lấy hình ảnh từ repository và gán vào DTO
             List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDon.getSanPhamId());
             dto.setHinhAnh(hinhAnhData);
@@ -224,7 +222,7 @@ public class ChiTietHoaDonService {
                 chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
                 chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
                 chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-                chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
+                chiTietHoaDonDTO.setGiaSanPham(chiTietSanPham.getGia());
                 chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
                 chiTietHoaDonDTO.setMaSanPhamChiTiet(chiTietSanPham.getMa());
                 chiTietHoaDonDTO.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
@@ -362,12 +360,12 @@ public class ChiTietHoaDonService {
             chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
             chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
             chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-            chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
+
             chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai().getId());
 
             // Thiết lập mã sản phẩm chi tiết
             chiTietHoaDonDTO.setMaSanPhamChiTiet(existingChiTietHoaDon.getChiTietSanPham().getMa());
-
+            chiTietHoaDonDTO.setGiaSanPham(existingChiTietHoaDon.getChiTietSanPham().getGia());
             // Thiết lập các thuộc tính khác từ chiTietSanPham
             chiTietHoaDonDTO.setChiTietSanPhamId(existingChiTietHoaDon.getChiTietSanPham().getId());
             chiTietHoaDonDTO.setChatLieuDaySanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay().getTen());
@@ -417,12 +415,12 @@ public class ChiTietHoaDonService {
             chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
             chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
             chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-            chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
+
             chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
 
             // Thiết lập mã sản phẩm chi tiết
             chiTietHoaDonDTO.setMaSanPhamChiTiet(existingChiTietHoaDon.getChiTietSanPham().getMa());
-
+            chiTietHoaDonDTO.setGiaSanPham(existingChiTietHoaDon.getChiTietSanPham().getGia());
             // Thiết lập các thuộc tính khác từ chiTietSanPham
             chiTietHoaDonDTO.setChiTietSanPhamId(existingChiTietHoaDon.getChiTietSanPham().getId());
             chiTietHoaDonDTO.setChatLieuDaySanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay() != null ? existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay().getTen() : null);
@@ -472,12 +470,12 @@ public class ChiTietHoaDonService {
             chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
             chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
             chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-            chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
+
             chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
 
             // Thiết lập mã sản phẩm chi tiết
             chiTietHoaDonDTO.setMaSanPhamChiTiet(existingChiTietHoaDon.getChiTietSanPham().getMa());
-
+            chiTietHoaDonDTO.setGiaSanPham(existingChiTietHoaDon.getChiTietSanPham().getGia());
             // Thiết lập các thuộc tính khác từ chiTietSanPham
             chiTietHoaDonDTO.setChiTietSanPhamId(existingChiTietHoaDon.getChiTietSanPham().getId());
             chiTietHoaDonDTO.setChatLieuDaySanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay() != null ? existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay().getTen() : null);

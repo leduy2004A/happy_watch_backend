@@ -302,8 +302,16 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     // Phương thức cập nhật trạng thái hóa đơn thành "Confirmed"
     @Transactional
-    public boolean confirmHoaDon(Long id) {
-        int updatedRows = hoaDonRepository.updateTrangThaiHoaDonToConfirmed(id);
-        return updatedRows > 0;
+    public boolean confirmHoaDonWithAddress(Long idHoaDon, String tinhThanhPho, String quanHuyen,
+                                            String xaPhuongThiTran, String diaChiCuThe, String dienThoai) {
+        int updatedRows = hoaDonRepository.updateHoaDonToConfirmedWithAddress(
+                idHoaDon,
+                tinhThanhPho,
+                quanHuyen,
+                xaPhuongThiTran,
+                diaChiCuThe,
+                dienThoai
+        );
+        return updatedRows > 0; // Trả về true nếu cập nhật thành công
     }
 }

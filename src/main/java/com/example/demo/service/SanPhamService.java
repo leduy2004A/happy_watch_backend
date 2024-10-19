@@ -61,7 +61,6 @@ public class SanPhamService {
         SanPham existingSanPham = sanPhamRepository.findByMa(ma);
         if (existingSanPham != null) {
             existingSanPham.setTen(sanPhamDetails.getTen());
-            existingSanPham.setGia(sanPhamDetails.getGia());
             existingSanPham.setMoTa(sanPhamDetails.getMoTa());
             existingSanPham.setUpdatedAt(LocalDate.now());
             return sanPhamRepository.save(existingSanPham);
@@ -117,14 +116,18 @@ public class SanPhamService {
         dto.setMaSanPham(sanPham.getMa());
         dto.setHinhAnh(hinhAnhs);
         dto.setTenSanPham(sanPham.getTen());
-        dto.setGia(sanPham.getGia());
+        dto.setGia(chiTietSanPham.getGia());
         KhuyenMai khuyenMai = sanPham.getKhuyenMai();
+        System.out.println("KhuyenMai: " + khuyenMai); // Log kiểm tra khuyến mãi
+        System.out.println("Gia goc: " + dto.getGia());
         if (khuyenMai != null) {
             BigDecimal giaSauGiam = tinhGiaSauGiam(dto.getGia(), khuyenMai);
+            System.out.println("Gia sau giam: " + giaSauGiam); // Kiểm tra giá sau giảm
             dto.setGiaSauGiam(giaSauGiam);
         } else {
             dto.setGiaSauGiam(dto.getGia());
         }
+
         dto.setTenMauSac(chiTietSanPham.getMauSac().getTen());
         dto.setLoaiMay(chiTietSanPham.getLoaiMay().getTen());
         dto.setChatLieuVo(chiTietSanPham.getChatLieuVo().getTen());
@@ -140,13 +143,14 @@ public class SanPhamService {
         return dto;
     }
 
+
     private void populateSanPhamChiTietDTO(SanPhamChiTietDTO dto, SanPham sanPham, ChiTietSanPham chiTietSanPham, List<String> hinhAnhs) {
         dto.setSanPhamId(sanPham.getId());
         dto.setMaSanPham(sanPham.getMa());
         dto.setHinhAnh(hinhAnhs);
         dto.setTenSanPham(sanPham.getTen());
-        dto.setGia(sanPham.getGia());
         KhuyenMai khuyenMai = sanPham.getKhuyenMai();
+        dto.setGia(chiTietSanPham.getGia());
         if (khuyenMai != null) {
             BigDecimal giaSauGiam = tinhGiaSauGiam(dto.getGia(), khuyenMai);
             dto.setGiaSauGiam(giaSauGiam);
