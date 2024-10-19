@@ -63,4 +63,7 @@ public class ChiTietSanPham {
 
     @Column(name = "gia")
     private BigDecimal gia;
+
+    @Column(name = "can_nang")
+    private Integer canNang;
 }

@@ -26,10 +26,11 @@ public class ChiTietHoaDonService {
     private ChiTietSanPhamRepository chiTietSanPhamRepository;
     @Autowired
     private HinhAnhRepository hinhAnhRepository;
-
+@Autowired
+HoaDonService hoaDonService;
 
     public List<ChiTietHoaDonDTO> getAllChiTietHoaDonWithDetails() {
-        List<ChiTietHoaDonDTO> chiTietHoaDonDTOS = chiTietHoaDonRepository.findAllChiTietHoaDon(); // Bạn cần đảm bảo phương thức này trả về List thay vì Page
+        List<ChiTietHoaDonDTO> chiTietHoaDonDTOS = chiTietHoaDonRepository.findAllChiTietHoaDon();
         List<ChiTietHoaDonDTO> result = new ArrayList<>();
 
         for (ChiTietHoaDonDTO chiTietHoaDonDTO : chiTietHoaDonDTOS) {
@@ -49,8 +50,10 @@ public class ChiTietHoaDonService {
             dto.setKhuyenMaiId(chiTietHoaDonDTO.getKhuyenMaiId());
             dto.setChiTietSanPhamId(chiTietHoaDonDTO.getChiTietSanPhamId());
             dto.setMaSanPhamChiTiet(chiTietHoaDonDTO.getMaSanPham());
+            dto.setCanNang(chiTietHoaDonDTO.getCanNang());
             dto.setChatLieuDaySanPham(chiTietHoaDonDTO.getChatLieuDaySanPham());
             dto.setChatLieuVoSanPham(chiTietHoaDonDTO.getChatLieuVoSanPham());
+            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonDTO.getHoaDonId()));
             dto.setHinhDangSanPham(chiTietHoaDonDTO.getHinhDangSanPham());
             dto.setLoaiKinhSanPham(chiTietHoaDonDTO.getLoaiKinhSanPham());
             dto.setLoaiMaySanPham(chiTietHoaDonDTO.getLoaiMaySanPham());
@@ -74,13 +77,9 @@ public class ChiTietHoaDonService {
             ChiTietHoaDonDTO dto = new ChiTietHoaDonDTO();
             dto.setChiTietHoaDonId(chiTietHoaDonOptional.get().getChiTietHoaDonId());
             dto.setHoaDonId(chiTietHoaDonOptional.get().getHoaDonId());
-
             BigDecimal slsp = BigDecimal.valueOf(chiTietHoaDonOptional.get().getSoLuong()) ;
-
             BigDecimal giasp = chiTietHoaDonOptional.get().getGiaSanPham();
-
             BigDecimal giaa = slsp.multiply(giasp);
-
             dto.setTongTienChiTietHoaDon(giaa);
             dto.setSanPhamId(chiTietHoaDonOptional.get().getSanPhamId());
             dto.setMaSanPham(chiTietHoaDonOptional.get().getMaSanPham());
@@ -96,10 +95,10 @@ public class ChiTietHoaDonService {
             dto.setLoaiMaySanPham(chiTietHoaDonOptional.get().getLoaiMaySanPham());
             dto.setMauSacSanPham(chiTietHoaDonOptional.get().getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDonOptional.get().getSoLuong());
+            dto.setCanNang(chiTietHoaDonOptional.get().getCanNang());
+            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonOptional.get().getHoaDonId()));
             dto.setGiaTungSanPham(chiTietHoaDonOptional.get().getGiaTungSanPham());
-            
             List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDonOptional.get().getSanPhamId());
-
             dto.setHinhAnh(hinhAnhData);
 
             return Optional.of(dto);
@@ -143,6 +142,8 @@ public class ChiTietHoaDonService {
             dto.setLoaiMaySanPham(chiTietHoaDon.getLoaiMaySanPham());
             dto.setMauSacSanPham(chiTietHoaDon.getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDon.getSoLuong());
+            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDon.getHoaDonId()));
+            dto.setCanNang(chiTietHoaDon.getCanNang());
             dto.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
             // Lấy hình ảnh từ repository và gán vào DTO
             List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDon.getSanPhamId());
@@ -226,7 +227,7 @@ public class ChiTietHoaDonService {
                 chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
                 chiTietHoaDonDTO.setMaSanPhamChiTiet(chiTietSanPham.getMa());
                 chiTietHoaDonDTO.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
-
+                chiTietHoaDonDTO.setCanNang(chiTietHoaDon.getCanNang());
                 BigDecimal giaTungSanPham = chiTietHoaDon.getGiaTungSanPham();
 
                 BigDecimal tongTienChiTietHoaDon = giaTungSanPham.multiply(new BigDecimal(chiTietHoaDon.getSoLuong()));

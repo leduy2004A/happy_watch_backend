@@ -41,14 +41,12 @@ public class SanPhamService {
     }
     public BigDecimal tinhGiaSauGiam(BigDecimal giaGoc, KhuyenMai khuyenMai) {
         BigDecimal giaSauGiam = giaGoc;
-
-        if (khuyenMai != null) { // Kiểm tra khuyến mãi không null
+        if (khuyenMai != null) {
             if ("phan tram".equalsIgnoreCase(khuyenMai.getLoaiKhuyenMai())) {
                 BigDecimal phanTramGiamGia = BigDecimal.valueOf(khuyenMai.getPhanTramGiamGia());
                 BigDecimal giamGia = giaGoc.multiply(phanTramGiamGia).divide(BigDecimal.valueOf(100));
                 giaSauGiam = giaGoc.subtract(giamGia);
             } else if ("so tien".equalsIgnoreCase(khuyenMai.getLoaiKhuyenMai())) {
-                // Kiểm tra giá trị không null
                 BigDecimal soTienGiam = khuyenMai.getSoTienGiam();
                 giaSauGiam = giaGoc.subtract(soTienGiam);
             }
@@ -139,6 +137,7 @@ public class SanPhamService {
         dto.setGioiTinh(sanPham.getGioiTinh().getTen());
         dto.setXuatXu(chiTietSanPham.getXuatXu());
         dto.setBaoHanh(chiTietSanPham.getBaoHanh());
+        dto.setCanNang(chiTietSanPham.getCanNang());
         dto.setChiTietSanPhamId(chiTietSanPham.getId());
         return dto;
     }
