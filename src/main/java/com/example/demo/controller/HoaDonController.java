@@ -28,8 +28,10 @@ public class HoaDonController {
     public ResponseEntity<HoaDon> updateHoaDonStatusToPaid(
             @PathVariable Long id,
             @RequestParam BigDecimal tienKhachDua,
-            @RequestParam String phuongThuc) {
-        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc);
+            @RequestParam String phuongThuc,
+            @RequestParam String tenKhachHang) {
+
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, tenKhachHang);
         return ResponseEntity.ok(updatedHoaDon);
     }
 
