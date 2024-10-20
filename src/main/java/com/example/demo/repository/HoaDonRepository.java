@@ -48,12 +48,14 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     // Cập nhật trạng thái của hóa đơn thành "Confirmed"
     @Modifying
     @Transactional
-    @Query("UPDATE HoaDon hd SET hd.trangThai = 'Confirmed', hd.tinhThanhPho = :tinhThanhPho, "
+    @Query("UPDATE HoaDon hd SET hd.trangThai = 'Confirmed', hd.tenNguoiNhan = :tenNguoiNhan, "
+            +"hd.tinhThanhPho = :tinhThanhPho,"
             + "hd.quanHuyen = :quanHuyen, hd.xaPhuongThiTran = :xaPhuongThiTran, "
             + "hd.diaChiCuThe = :diaChiCuThe, hd.dienThoai = :dienThoai "
             + "WHERE hd.id = :id")
     int updateHoaDonToConfirmedWithAddress(
             @Param("id") Long id,
+            @Param("tenNguoiNhan") String tenNguoiNhan,
             @Param("tinhThanhPho") String tinhThanhPho,
             @Param("quanHuyen") String quanHuyen,
             @Param("xaPhuongThiTran") String xaPhuongThiTran,

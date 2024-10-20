@@ -29,9 +29,9 @@ public class HoaDonController {
             @PathVariable Long id,
             @RequestParam BigDecimal tienKhachDua,
             @RequestParam String phuongThuc,
-            @RequestParam String tenKhachHang,
+            @RequestParam String maGiaoDich,
             @RequestParam BigDecimal gia) {
-        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, tenKhachHang, gia);
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, gia,maGiaoDich);
         return ResponseEntity.ok(updatedHoaDon);
     }
 
@@ -133,6 +133,7 @@ public class HoaDonController {
     @PutMapping("/confirm-with-address/{idHoaDon}")
     public ResponseEntity<String> confirmHoaDonWithAddress(
             @PathVariable Long idHoaDon,
+            @RequestParam String tenNguoiNhan,
             @RequestParam String tinhThanhPho,
             @RequestParam String quanHuyen,
             @RequestParam String xaPhuongThiTran,
@@ -141,6 +142,7 @@ public class HoaDonController {
 
         boolean isUpdated = hoaDonService.confirmHoaDonWithAddress(
                 idHoaDon,
+                tenNguoiNhan,
                 tinhThanhPho,
                 quanHuyen,
                 xaPhuongThiTran,

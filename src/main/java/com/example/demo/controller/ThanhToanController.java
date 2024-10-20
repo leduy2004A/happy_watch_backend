@@ -27,7 +27,6 @@ public class ThanhToanController {
         return ResponseEntity.ok(thanhToanList);
     }
 
-    //hiển thị dữ liệu thanh toán dựa vào id hóa đơn
     @GetMapping("/hien-thi/{hoaDonId}/")
     public ResponseEntity<?> getThanhToanByHoaDonId(@PathVariable Long hoaDonId) {
         Optional<ThanhToan> thanhToanOpt = thanhToanService.getThanhToanByHoaDonId(hoaDonId);
