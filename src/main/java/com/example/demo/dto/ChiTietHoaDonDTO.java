@@ -27,7 +27,6 @@ public class ChiTietHoaDonDTO {
     private String mauSacSanPham;
     private Integer soLuong;
 
-    private Integer tongCanNang;
     private Integer canNang;
     private BigDecimal giaTungSanPham;
 

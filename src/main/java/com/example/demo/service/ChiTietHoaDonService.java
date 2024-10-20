@@ -53,7 +53,7 @@ HoaDonService hoaDonService;
             dto.setCanNang(chiTietHoaDonDTO.getCanNang());
             dto.setChatLieuDaySanPham(chiTietHoaDonDTO.getChatLieuDaySanPham());
             dto.setChatLieuVoSanPham(chiTietHoaDonDTO.getChatLieuVoSanPham());
-            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonDTO.getHoaDonId()));
+//            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonDTO.getHoaDonId()));
             dto.setHinhDangSanPham(chiTietHoaDonDTO.getHinhDangSanPham());
             dto.setLoaiKinhSanPham(chiTietHoaDonDTO.getLoaiKinhSanPham());
             dto.setLoaiMaySanPham(chiTietHoaDonDTO.getLoaiMaySanPham());
@@ -96,7 +96,7 @@ HoaDonService hoaDonService;
             dto.setMauSacSanPham(chiTietHoaDonOptional.get().getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDonOptional.get().getSoLuong());
             dto.setCanNang(chiTietHoaDonOptional.get().getCanNang());
-            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonOptional.get().getHoaDonId()));
+//            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonOptional.get().getHoaDonId()));
             dto.setGiaTungSanPham(chiTietHoaDonOptional.get().getGiaTungSanPham());
             List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDonOptional.get().getSanPhamId());
             dto.setHinhAnh(hinhAnhData);
@@ -142,7 +142,6 @@ HoaDonService hoaDonService;
             dto.setLoaiMaySanPham(chiTietHoaDon.getLoaiMaySanPham());
             dto.setMauSacSanPham(chiTietHoaDon.getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDon.getSoLuong());
-            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDon.getHoaDonId()));
             dto.setCanNang(chiTietHoaDon.getCanNang());
             dto.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
             // Lấy hình ảnh từ repository và gán vào DTO
@@ -188,7 +187,7 @@ HoaDonService hoaDonService;
         Map<String, Object> response = new HashMap<>();
         response.put("chiTietHoaDons", result);
         response.put("tongTienHoaDon", tongTienHoaDon);
-
+        response.put("tongCanNang",hoaDonService.tinhTongCanNang(idHD));
         if (khuyenMaiTotNhat != null) {
             response.put("maKhuyenMaiTotNhat", khuyenMaiTotNhat.getMa());
             response.put("giaGiamTotNhat", giaGiamTotNhat);

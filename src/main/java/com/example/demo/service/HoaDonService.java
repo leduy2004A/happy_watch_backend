@@ -242,9 +242,15 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
 
     public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc) {
+        BigDecimal tienKhachDuaSafe = tienKhachDua != null ? tienKhachDua : BigDecimal.ZERO;
+
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại với ID: " + hoaDonId));
-        if (tienKhachDua.compareTo(hoaDon.getGia()) >= 0) {
+
+        BigDecimal giaHoaDon = hoaDon.getGia() != null ? hoaDon.getGia() : BigDecimal.ZERO;
+
+        if (tienKhachDuaSafe.compareTo(giaHoaDon) >= 0) {
+            // phần code còn lại giữ nguyên
             ThanhToan thanhToan = new ThanhToan();
             thanhToan.setMa(UUID.randomUUID().toString());
             thanhToan.setPhuongThuc(phuongThuc);
@@ -263,6 +269,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         } else {
             throw new RuntimeException("Số tiền khách đưa không đủ để thanh toán hóa đơn.");
         }
+
     }
 
     public HoaDon updateHoaDonWithNguoiDung(Long idHoaDon, Long idNguoiDung) {
