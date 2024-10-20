@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.DiaChi;
 import com.example.demo.service.DiaChiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +24,17 @@ public class DiaChiController {
         return ResponseEntity.ok(diaChis);
     }
 
-    @GetMapping("/dia-chi/first/{id}")
-    public ResponseEntity<DiaChi> getFirstDiaChiByNguoiDungId(@PathVariable("id") Long idNguoiDung) {
-        Optional<DiaChi> diaChi = diaChiService.getFirstDiaChiByNguoiDungId(idNguoiDung);
-        return diaChi.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PutMapping("/dia-chi/first/{id}")
+    public ResponseEntity<DiaChi> updateHoaDonWithNguoiDungAndGetFirstDiaChi(
+            @PathVariable Long idHoaDon,
+            @RequestParam Long idNguoiDung) {
+
+        try {
+            DiaChi diaChi = diaChiService.updateHoaDonWithNguoiDungAndGetFirstDiaChi(idHoaDon, idNguoiDung);
+            return ResponseEntity.ok(diaChi);  // Trả về địa chỉ đầu tiên của người dùng
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @GetMapping("/{idNguoiDung}/diachi/{idDiaChi}")

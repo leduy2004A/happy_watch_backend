@@ -280,15 +280,6 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
 
 
-    public HoaDon updateHoaDonWithNguoiDung(Long idHoaDon, Long idNguoiDung) {
-        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
-                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
-        NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
-        hoaDon.setNguoiDung(nguoiDung);
-        return hoaDonRepository.save(hoaDon);
-    }
-
     public List<HoaDon> getHoaDonsChoThanhToanByNguoiDungId(Long idNguoiDung) {
         return hoaDonRepository.findHoaDonByNguoiDungIdAndTrangThaiChoThanhToan(idNguoiDung);
     }

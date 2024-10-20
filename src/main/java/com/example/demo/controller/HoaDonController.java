@@ -36,13 +36,6 @@ public class HoaDonController {
     }
 
 
-    @PutMapping("/update/khach-hang/{idHoaDon}")
-    public ResponseEntity<HoaDon> updateHoaDon(
-            @PathVariable Long idHoaDon,
-            @RequestParam Long idNguoiDung) {
-        HoaDon updatedHoaDon = hoaDonService.updateHoaDonWithNguoiDung(idHoaDon, idNguoiDung);
-        return ResponseEntity.ok(updatedHoaDon);
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<HoaDonDTO>> getAllHoaDonWithDetails() {
