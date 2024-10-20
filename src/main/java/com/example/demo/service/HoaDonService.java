@@ -241,23 +241,24 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
     }
 
 
-    public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc) {
-        BigDecimal tienKhachDuaSafe = tienKhachDua != null ? tienKhachDua : BigDecimal.ZERO;
-
+    public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, String tenKhachHang, BigDecimal gia) {
+        // Tìm hóa đơn
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại với ID: " + hoaDonId));
 
-        BigDecimal giaHoaDon = hoaDon.getGia() != null ? hoaDon.getGia() : BigDecimal.ZERO;
+        hoaDon.setGia(gia);
 
-        if (tienKhachDuaSafe.compareTo(giaHoaDon) >= 0) {
-            // phần code còn lại giữ nguyên
+        if (tienKhachDua.compareTo(hoaDon.getGia()) >= 0) {
+            // Tạo thông tin thanh toán mới
             ThanhToan thanhToan = new ThanhToan();
             thanhToan.setMa(UUID.randomUUID().toString());
             thanhToan.setPhuongThuc(phuongThuc);
             thanhToan.setSoTien(tienKhachDua);
             ThanhToan savedThanhToan = thanhToanRepository.save(thanhToan);
+
             hoaDon.setTrangThai("Paid");
             hoaDon.setThanhToan(savedThanhToan);
+
             List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(hoaDonId);
             for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDonList) {
                 ChiTietSanPham chiTietSanPham = chiTietHoaDon.getChiTietSanPham();
@@ -265,12 +266,19 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() - soLuongTru);
                 chiTietSanPhamRepository.save(chiTietSanPham);
             }
+
+            NguoiDung nguoiDung = nguoiDungRepository.findById(hoaDon.getNguoiDung().getId())
+                    .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại với ID: " + hoaDon.getNguoiDung().getId()));
+            nguoiDung.setTen(tenKhachHang);
+            nguoiDungRepository.save(nguoiDung);
+
             return hoaDonRepository.save(hoaDon);
         } else {
             throw new RuntimeException("Số tiền khách đưa không đủ để thanh toán hóa đơn.");
         }
-
     }
+
+
 
     public HoaDon updateHoaDonWithNguoiDung(Long idHoaDon, Long idNguoiDung) {
         HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)

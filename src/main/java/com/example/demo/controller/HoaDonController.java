@@ -6,9 +6,6 @@ import com.example.demo.model.HoaDon;
 import com.example.demo.service.ChiTietHoaDonService;
 import com.example.demo.service.HoaDonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +28,13 @@ public class HoaDonController {
     public ResponseEntity<HoaDon> updateHoaDonStatusToPaid(
             @PathVariable Long id,
             @RequestParam BigDecimal tienKhachDua,
-            @RequestParam String phuongThuc) {
-        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc);
+            @RequestParam String phuongThuc,
+            @RequestParam String tenKhachHang,
+            @RequestParam BigDecimal gia) {
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, tenKhachHang, gia);
         return ResponseEntity.ok(updatedHoaDon);
     }
+
 
     @PutMapping("/update/khach-hang/{idHoaDon}")
     public ResponseEntity<HoaDon> updateHoaDon(
