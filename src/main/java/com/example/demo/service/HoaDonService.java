@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.appException.AppException;
 import com.example.demo.dto.HoaDonDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
@@ -243,6 +242,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
 
     public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, String tenKhachHang, BigDecimal gia) {
+        // Tìm hóa đơn
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại với ID: " + hoaDonId));
 
@@ -267,21 +267,19 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 chiTietSanPhamRepository.save(chiTietSanPham);
             }
 
-            NguoiDung nguoiDung = hoaDon.getNguoiDung();
-            if(nguoiDung !=null){
-                nguoiDung.setTen(tenKhachHang);
-                nguoiDungRepository.save(nguoiDung);
-            }else{
-                throw new AppException(404,"Người dùng không tồn tại với ID: " + hoaDon.getNguoiDung().getId());
-            }
+            NguoiDung nguoiDung = nguoiDungRepository.findById(hoaDon.getNguoiDung().getId())
+                    .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại với ID: " + hoaDon.getNguoiDung().getId()));
+            nguoiDung.setTen(tenKhachHang);
+            nguoiDungRepository.save(nguoiDung);
+
             return hoaDonRepository.save(hoaDon);
         } else {
-            throw new AppException(404,"Số tiền khách đưa không đủ để thanh toán hóa đơn.");
+            throw new RuntimeException("Số tiền khách đưa không đủ để thanh toán hóa đơn.");
         }
     }
 
 
-/// cái này duy ơi
+
     public HoaDon updateHoaDonWithNguoiDung(Long idHoaDon, Long idNguoiDung) {
         HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
