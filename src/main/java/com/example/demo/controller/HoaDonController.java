@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.appException.AppException;
 import com.example.demo.dto.ChiTietHoaDonDTO;
 import com.example.demo.dto.HoaDonDTO;
-import com.example.demo.dto.MessageDTO;
 import com.example.demo.model.HoaDon;
 import com.example.demo.service.ChiTietHoaDonService;
 import com.example.demo.service.HoaDonService;
@@ -27,21 +25,14 @@ public class HoaDonController {
     private ChiTietHoaDonService chiTietHoaDonService;
 
     @PutMapping("/update-status/{id}")
-    public ResponseEntity<?> updateHoaDonStatusToPaid(
+    public ResponseEntity<HoaDon> updateHoaDonStatusToPaid(
             @PathVariable Long id,
             @RequestParam BigDecimal tienKhachDua,
             @RequestParam String phuongThuc,
-            @RequestParam String tenKhachHang,
+            @RequestParam String maGiaoDich,
             @RequestParam BigDecimal gia) {
-        try{
-            HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, tenKhachHang, gia);
-            return ResponseEntity.ok(updatedHoaDon);
-        }
-        catch (AppException e)
-        {
-            return ResponseEntity.status(e.getCode()).body(new MessageDTO(e.getMessage()));
-        }
-
+        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, gia,maGiaoDich);
+        return ResponseEntity.ok(updatedHoaDon);
     }
 
 
@@ -142,6 +133,7 @@ public class HoaDonController {
     @PutMapping("/confirm-with-address/{idHoaDon}")
     public ResponseEntity<String> confirmHoaDonWithAddress(
             @PathVariable Long idHoaDon,
+            @RequestParam String tenNguoiNhan,
             @RequestParam String tinhThanhPho,
             @RequestParam String quanHuyen,
             @RequestParam String xaPhuongThiTran,
@@ -150,6 +142,7 @@ public class HoaDonController {
 
         boolean isUpdated = hoaDonService.confirmHoaDonWithAddress(
                 idHoaDon,
+                tenNguoiNhan,
                 tinhThanhPho,
                 quanHuyen,
                 xaPhuongThiTran,

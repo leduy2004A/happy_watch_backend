@@ -241,7 +241,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
     }
 
 
-    public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, String tenKhachHang, BigDecimal gia) {
+    public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, BigDecimal gia,String maGiaoDich) {
         // Tìm hóa đơn
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại với ID: " + hoaDonId));
@@ -254,6 +254,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             thanhToan.setMa(UUID.randomUUID().toString());
             thanhToan.setPhuongThuc(phuongThuc);
             thanhToan.setSoTien(tienKhachDua);
+            thanhToan.setMaGiaoDich(maGiaoDich);
             ThanhToan savedThanhToan = thanhToanRepository.save(thanhToan);
 
             hoaDon.setTrangThai("Paid");
@@ -266,11 +267,6 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() - soLuongTru);
                 chiTietSanPhamRepository.save(chiTietSanPham);
             }
-
-            NguoiDung nguoiDung = nguoiDungRepository.findById(hoaDon.getNguoiDung().getId())
-                    .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại với ID: " + hoaDon.getNguoiDung().getId()));
-            nguoiDung.setTen(tenKhachHang);
-            nguoiDungRepository.save(nguoiDung);
 
             return hoaDonRepository.save(hoaDon);
         } else {
@@ -318,10 +314,12 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     // Phương thức cập nhật trạng thái hóa đơn thành "Confirmed"
     @Transactional
-    public boolean confirmHoaDonWithAddress(Long idHoaDon, String tinhThanhPho, String quanHuyen,
+    public boolean confirmHoaDonWithAddress(Long idHoaDon, String tenNguoiNhan ,String tinhThanhPho, String quanHuyen,
                                             String xaPhuongThiTran, String diaChiCuThe, String dienThoai) {
+
         int updatedRows = hoaDonRepository.updateHoaDonToConfirmedWithAddress(
                 idHoaDon,
+                tenNguoiNhan,
                 tinhThanhPho,
                 quanHuyen,
                 xaPhuongThiTran,
