@@ -241,12 +241,19 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
     }
 
 
-    public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, BigDecimal gia,String maGiaoDich) {
-        // Tìm hóa đơn
+    public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, BigDecimal gia, String maGiaoDich) {
+
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại với ID: " + hoaDonId));
 
         hoaDon.setGia(gia);
+
+        if (phuongThuc.equalsIgnoreCase("chuyển khoản") && (maGiaoDich == null || maGiaoDich.trim().isEmpty())) {
+            throw new RuntimeException("Mã giao dịch là bắt buộc khi thanh toán bằng chuyển khoản.");
+        }
+        if (phuongThuc.equalsIgnoreCase("tiền mặt")) {
+            maGiaoDich = null;
+        }
 
         if (tienKhachDua.compareTo(hoaDon.getGia()) >= 0) {
             // Tạo thông tin thanh toán mới
@@ -260,6 +267,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             hoaDon.setTrangThai("Paid");
             hoaDon.setThanhToan(savedThanhToan);
 
+
             List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(hoaDonId);
             for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDonList) {
                 ChiTietSanPham chiTietSanPham = chiTietHoaDon.getChiTietSanPham();
@@ -268,6 +276,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 chiTietSanPhamRepository.save(chiTietSanPham);
             }
 
+            // Lưu hóa đơn và trả về
             return hoaDonRepository.save(hoaDon);
         } else {
             throw new RuntimeException("Số tiền khách đưa không đủ để thanh toán hóa đơn.");

@@ -28,16 +28,14 @@ public class DiaChiService {
     }
 
     public DiaChi updateHoaDonWithNguoiDungAndGetFirstDiaChi(Long idHoaDon, Long idNguoiDung) {
-        // Bước 1: Cập nhật người dùng cho hóa đơn
         HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
         NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
                 .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
 
         hoaDon.setNguoiDung(nguoiDung);
-        hoaDonRepository.save(hoaDon);  // Lưu cập nhật hóa đơn
+        hoaDonRepository.save(hoaDon);
 
-        // Bước 2: Lấy địa chỉ đầu tiên của người dùng
         List<DiaChi> diaChis = diaChiRepository.findByIdNguoiDung(idNguoiDung);
         if (!diaChis.isEmpty()) {
             return diaChis.get(0); // Trả về địa chỉ đầu tiên
