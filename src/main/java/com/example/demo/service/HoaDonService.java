@@ -3,10 +3,15 @@ package com.example.demo.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import com.example.demo.dto.HoaDonDTO;
 import com.example.demo.model.ChiTietHoaDon;
 import com.example.demo.model.ChiTietSanPham;
 import com.example.demo.model.HoaDon;
@@ -247,5 +252,4 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         hoaDon.setNguoiDung(nguoiDung);
         return hoaDonRepository.save(hoaDon);
     }
-
 }
