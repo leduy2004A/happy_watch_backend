@@ -18,9 +18,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "san_pham")
@@ -34,9 +37,6 @@ public class SanPham {
 
     @Column(name = "ten")
     private String ten;
-
-    @Column(name = "gia")
-    private BigDecimal gia;
 
     @Column(name = "Created_at")
     private LocalDate createdAt;

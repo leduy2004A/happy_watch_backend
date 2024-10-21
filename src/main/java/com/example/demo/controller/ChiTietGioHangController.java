@@ -90,8 +90,7 @@ public class ChiTietGioHangController {
         GioHang gioHang = optionalGioHang.get();
         ChiTietSanPham chiTietSanPham = optionalChiTietSanPham.get();
         int soLuong = cartDetailsDTO.getSoLuong() < 1 ? 1 : cartDetailsDTO.getSoLuong();
-        BigDecimal giaTungSanPham = chiTietSanPham.getSanPham().getGia();
-
+        BigDecimal giaTungSanPham = cartDetailsDTO.getGiaTungSanPham();
         // Create and add a new ChiTietGioHang entity
         ChiTietGioHang cartDetail = gioHang.getCartDetails().stream()
                 .filter(detail -> detail.getChiTietSanPham().getId().equals(cartDetailsDTO.getIdSanPhamChiTiet())

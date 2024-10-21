@@ -1,5 +1,5 @@
 package com.example.demo.model;
-
+import com.example.demo.dto.NguoiDungRegisterDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,7 +36,17 @@ public class NguoiDung {
     @Column(name = "trang_thai")
     private boolean trangThai;
 
+    @Column(name = "email")
+    private String email;
     @ManyToOne
     @JoinColumn(name = "id_vai_tro")
     private VaiTro vaiTro;
+
+    public NguoiDung(NguoiDungRegisterDTO nguoiDungRegisterDTO) {
+        this.avatar = "https://thuthuatnhanh.com/wp-content/uploads/2021/07/hinh-anh-hinh-nen-dong-ho.jpg";
+        this.ten = nguoiDungRegisterDTO.getTen();
+        this.username = nguoiDungRegisterDTO.getUsername();
+        this.password = nguoiDungRegisterDTO.getPassword();
+    }
 }
+

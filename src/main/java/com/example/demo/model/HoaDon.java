@@ -1,4 +1,5 @@
 package com.example.demo.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+import java.util.List;
 
 @Entity
 @Data
@@ -44,11 +45,14 @@ public class HoaDon {
     @Column(name = "dia_chi_cu_the")
     private String diaChiCuThe;
 
-    @Column(name = "dien_thoai")
-    private String dienThoai;    
+    @Column(name = "Dien_thoai")
+    private String dienThoai;
 
     @Column(name = "Ngay_tao")
     private LocalDate ngayTao;
+
+    @Column(name = "tong_can_nang")
+    private Integer tongCanNang;
 
     @Column(name = "Trang_thai")
     private String trangThai;
@@ -60,4 +64,11 @@ public class HoaDon {
     @ManyToOne
     @JoinColumn(name = "id_nhan_vien")
     private NguoiDung nhanVien;
+    @ManyToOne
+    @JoinColumn(name = "id_khuyen_mai_hoa_don")
+    private KhuyenMaiHoaDon khuyenMaiHoaDon;
+
+    @OneToMany(mappedBy = "hoaDon")
+    @JsonIgnore
+    private List<ChiTietHoaDon> chiTietHoaDonList;
 }
