@@ -30,7 +30,7 @@ public class HoaDonController {
             @PathVariable Long id,
             @RequestParam BigDecimal tienKhachDua,
             @RequestParam String phuongThuc,
-            @RequestParam String maGiaoDich,
+            @RequestParam(required = false) String maGiaoDich,
             @RequestParam BigDecimal gia) {
         try {
             HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, gia, maGiaoDich);
