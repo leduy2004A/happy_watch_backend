@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.appException.AppException;
 import com.example.demo.model.DiaChi;
 import com.example.demo.service.DiaChiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +26,15 @@ public class DiaChiController {
     }
 
     @PutMapping("/dia-chi/first/{id}")
-    public ResponseEntity<DiaChi> updateHoaDonWithNguoiDungAndGetFirstDiaChi(
+    public ResponseEntity<?> updateHoaDonWithNguoiDungAndGetFirstDiaChi(
             @PathVariable Long idHoaDon,
             @RequestParam Long idNguoiDung) {
 
         try {
             DiaChi diaChi = diaChiService.updateHoaDonWithNguoiDungAndGetFirstDiaChi(idHoaDon, idNguoiDung);
-            return ResponseEntity.ok(diaChi);  // Trả về địa chỉ đầu tiên của người dùng
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.ok(diaChi);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getCode()).body(e.getMessage());
         }
     }
 

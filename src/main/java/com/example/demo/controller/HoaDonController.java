@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.appException.AppException;
 import com.example.demo.dto.ChiTietHoaDonDTO;
 import com.example.demo.dto.HoaDonDTO;
 import com.example.demo.model.HoaDon;
@@ -25,14 +26,18 @@ public class HoaDonController {
     private ChiTietHoaDonService chiTietHoaDonService;
 
     @PutMapping("/update-status/{id}")
-    public ResponseEntity<HoaDon> updateHoaDonStatusToPaid(
+    public ResponseEntity<?> updateHoaDonStatusToPaid(
             @PathVariable Long id,
             @RequestParam BigDecimal tienKhachDua,
             @RequestParam String phuongThuc,
             @RequestParam String maGiaoDich,
             @RequestParam BigDecimal gia) {
-        HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, gia,maGiaoDich);
-        return ResponseEntity.ok(updatedHoaDon);
+        try {
+            HoaDon updatedHoaDon = hoaDonService.updateHoaDonStatusToPaid(id, tienKhachDua, phuongThuc, gia, maGiaoDich);
+            return ResponseEntity.ok(updatedHoaDon);
+        } catch (AppException ex) {
+            return ResponseEntity.status(ex.getCode()).body(ex.getMessage());
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.appException.AppException;
 import com.example.demo.dto.HoaDonDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
@@ -244,19 +245,23 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
     public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, BigDecimal gia, String maGiaoDich) {
 
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
-                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại với ID: " + hoaDonId));
+                .orElseThrow(() -> new AppException(404, "Hóa đơn không tồn tại với ID: " + hoaDonId));
+
+        if (hoaDon.getThanhToan() != null) {
+            throw new AppException(400, "Hóa đơn đã được thanh toán trước đó và không thể tiếp tục thanh toán.");
+        }
 
         hoaDon.setGia(gia);
 
         if (phuongThuc.equalsIgnoreCase("chuyển khoản") && (maGiaoDich == null || maGiaoDich.trim().isEmpty())) {
-            throw new RuntimeException("Mã giao dịch là bắt buộc khi thanh toán bằng chuyển khoản.");
+            throw new AppException(400, "Mã giao dịch là bắt buộc khi thanh toán bằng chuyển khoản.");
         }
+
         if (phuongThuc.equalsIgnoreCase("tiền mặt")) {
             maGiaoDich = null;
         }
 
         if (tienKhachDua.compareTo(hoaDon.getGia()) >= 0) {
-            // Tạo thông tin thanh toán mới
             ThanhToan thanhToan = new ThanhToan();
             thanhToan.setMa(UUID.randomUUID().toString());
             thanhToan.setPhuongThuc(phuongThuc);
@@ -267,7 +272,6 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             hoaDon.setTrangThai("Paid");
             hoaDon.setThanhToan(savedThanhToan);
 
-
             List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(hoaDonId);
             for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDonList) {
                 ChiTietSanPham chiTietSanPham = chiTietHoaDon.getChiTietSanPham();
@@ -275,13 +279,12 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() - soLuongTru);
                 chiTietSanPhamRepository.save(chiTietSanPham);
             }
-
-            // Lưu hóa đơn và trả về
             return hoaDonRepository.save(hoaDon);
         } else {
-            throw new RuntimeException("Số tiền khách đưa không đủ để thanh toán hóa đơn.");
+            throw new AppException(400, "Số tiền khách đưa không đủ để thanh toán hóa đơn.");
         }
     }
+
 
 
 

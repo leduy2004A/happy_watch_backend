@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.appException.AppException;
 import com.example.demo.model.DiaChi;
 import com.example.demo.model.HoaDon;
 import com.example.demo.model.NguoiDung;
@@ -7,6 +8,7 @@ import com.example.demo.repository.DiaChiRepository;
 import com.example.demo.repository.HoaDonRepository;
 import com.example.demo.repository.NguoiDungRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,19 +31,18 @@ public class DiaChiService {
 
     public DiaChi updateHoaDonWithNguoiDungAndGetFirstDiaChi(Long idHoaDon, Long idNguoiDung) {
         HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
-                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
+                .orElseThrow(() -> new AppException(404, "Hóa đơn không tồn tại"));
         NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
-                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new AppException(404, "Người dùng không tồn tại"));
 
         hoaDon.setNguoiDung(nguoiDung);
         hoaDonRepository.save(hoaDon);
 
         List<DiaChi> diaChis = diaChiRepository.findByIdNguoiDung(idNguoiDung);
-        if (!diaChis.isEmpty()) {
-            return diaChis.get(0); // Trả về địa chỉ đầu tiên
-        } else {
-            throw new RuntimeException("Không có địa chỉ nào cho người dùng này.");
+        if (diaChis.isEmpty()) {
+            throw new AppException(404, "Người dùng này không có địa chỉ nào.");
         }
+        return diaChis.get(0);
     }
 
     public Optional<DiaChi> getDiaChiByNguoiDungIdAndDiaChiId(Long idNguoiDung, Long idDiaChi) {
