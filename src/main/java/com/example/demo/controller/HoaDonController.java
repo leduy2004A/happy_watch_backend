@@ -161,4 +161,18 @@ public class HoaDonController {
             return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật địa chỉ.");
         }
     }
+
+
+    //thêm loại hóa đơn
+    @PutMapping("/update-loai-hoa-don/{id}")
+    public ResponseEntity<?> updateLoaiHoaDon(
+            @PathVariable Long id,
+            @RequestParam String loaiHoaDon) {
+        try {
+            HoaDon updatedHoaDon = hoaDonService.updateLoaiHoaDon(id, loaiHoaDon);
+            return ResponseEntity.ok(updatedHoaDon);
+        } catch (AppException ex) {
+            return ResponseEntity.status(ex.getCode()).body(ex.getMessage());
+        }
+    }
 }

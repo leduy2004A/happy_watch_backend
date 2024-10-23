@@ -58,6 +58,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
             dto.setDienThoai(hoaDon.getDienThoai());
             dto.setNgayTao(hoaDon.getNgayTao());
+            dto.setLoaiHoaDon(hoaDon.getLoaiHoaDon());
             dto.setTrangThai(hoaDon.getTrangThai());
             dto.setTongCanNang(tinhTongCanNang(hoaDon.getId()));
             dto.setNguoiDungId(nguoiDung.getId());
@@ -106,6 +107,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             dto.setXaPhuongThiTran(hoaDon.getXaPhuongThiTran());
             dto.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
             dto.setNgayTao(hoaDon.getNgayTao());
+            dto.setLoaiHoaDon(hoaDon.getLoaiHoaDon());
             dto.setTrangThai(hoaDon.getTrangThai());
             dto.setTongCanNang(tinhTongCanNang(hoaDon.getId()));
             dto.setNguoiDungId(nguoiDung.getId());
@@ -216,6 +218,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             existingHoaDon.setDiaChiCuThe(hoaDon.getDiaChiCuThe());
             existingHoaDon.setDienThoai(hoaDon.getDienThoai());
             existingHoaDon.setTrangThai(hoaDon.getTrangThai());
+            existingHoaDon.setLoaiHoaDon(hoaDon.getLoaiHoaDon());
             existingHoaDon.setTongCanNang(hoaDon.getTongCanNang());
             // Lưu lại hóa đơn đã cập nhật
             hoaDonRepository.save(existingHoaDon);
@@ -245,7 +248,6 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
     public HoaDon updateHoaDonStatusToPaid(Long hoaDonId, BigDecimal tienKhachDua, String phuongThuc, BigDecimal gia, String maGiaoDich) {
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
                 .orElseThrow(() -> new AppException(404, "Hóa đơn không tồn tại với ID: " + hoaDonId));
-
         if (hoaDon.getThanhToan() != null) {
             throw new AppException(400, "Hóa đơn đã được thanh toán trước đó và không thể tiếp tục thanh toán.");
         }
@@ -256,17 +258,18 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         if (phuongThuc.equalsIgnoreCase("tiền mặt")) {
             maGiaoDich = null;
         }
+        List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(hoaDonId);
+        if (chiTietHoaDonList.isEmpty()) {
+            throw new AppException(400, "Hóa đơn không có sản phẩm, không thể thanh toán.");
+        }
         if (tienKhachDua.compareTo(hoaDon.getGia()) >= 0) {
             ThanhToan thanhToan = new ThanhToan();
             thanhToan.setMa(UUID.randomUUID().toString());
             thanhToan.setSoTien(tienKhachDua);
             thanhToan.setMaGiaoDich(maGiaoDich);
-
             ThanhToan savedThanhToan = thanhToanRepository.save(thanhToan);
             hoaDon.setTrangThai("Paid");
             hoaDon.setThanhToan(savedThanhToan);
-
-            List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(hoaDonId);
             for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDonList) {
                 ChiTietSanPham chiTietSanPham = chiTietHoaDon.getChiTietSanPham();
                 int soLuongTru = chiTietHoaDon.getSoLuong();
@@ -278,6 +281,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             throw new AppException(400, "Số tiền khách đưa không đủ để thanh toán hóa đơn.");
         }
     }
+
 
 
 
@@ -302,7 +306,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
     @Transactional
     public boolean cancelHoaDon(Long id) {
         int updatedRows = hoaDonRepository.updateTrangThaiHoaDonToCancelled(id);
-        return updatedRows > 0; // Trả về true nếu cập nhật thành công
+        return updatedRows > 0;
     }
 
     // lấy tất cả hóa đơn có trạng thái đã hủy
@@ -339,5 +343,13 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
         } else {
             throw new EntityNotFoundException("Không tìm thấy hóa đơn với ID: " + idHoaDon);
         }
+    }
+
+//truyền loại hóa đơn
+    public HoaDon updateLoaiHoaDon(Long id, String loaiHoaDon) {
+        HoaDon hoaDon = hoaDonRepository.findById(id)
+                .orElseThrow(() -> new AppException(404, "Hóa đơn không tồn tại với ID: " + id));
+        hoaDon.setLoaiHoaDon(loaiHoaDon);
+        return hoaDonRepository.save(hoaDon);
     }
 }

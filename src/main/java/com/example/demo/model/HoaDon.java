@@ -57,6 +57,8 @@ public class HoaDon {
     @Column(name = "Trang_thai")
     private String trangThai;
 
+    @Column(name = "loai_hoa_don")
+    private String loaiHoaDon;
     @ManyToOne
     @JoinColumn(name = "id_thanh_toan")
     private ThanhToan thanhToan;

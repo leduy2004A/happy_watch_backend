@@ -29,7 +29,6 @@ public class DiaChiController {
     public ResponseEntity<?> updateHoaDonWithNguoiDungAndGetFirstDiaChi(
             @PathVariable Long idHoaDon,
             @RequestParam Long idNguoiDung) {
-
         try {
             DiaChi diaChi = diaChiService.updateHoaDonWithNguoiDungAndGetFirstDiaChi(idHoaDon, idNguoiDung);
             return ResponseEntity.ok(diaChi);
