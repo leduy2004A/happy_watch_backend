@@ -363,7 +363,7 @@ public class ChiTietHoaDonService {
             int currentSoLuong = existingChiTietHoaDon.getSoLuong();
             int maxSoLuong = existingChiTietHoaDon.getChiTietSanPham().getSoLuong(); // Lấy số lượng từ ChiTietSanPham
 
-            // Kiểm tra xem số lượng có vượt quá số lượng tồn kho không
+            // Kiểm tra xem số lượng có vượt quá số lượng tồn kho
             if (currentSoLuong < maxSoLuong) {
                 // Cập nhật số lượng, cộng thêm 1
                 existingChiTietHoaDon.setSoLuong(currentSoLuong + 1);
