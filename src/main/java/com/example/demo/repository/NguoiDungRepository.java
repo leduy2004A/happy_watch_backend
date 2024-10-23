@@ -15,10 +15,8 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
     @Query(value = "select * from nguoi_dung where Username = :username",nativeQuery = true)
     public List<NguoiDung> findNguoiDungByUsername(@Param("username") String username);
     NguoiDung findByUsername(String username);
-    @Query("SELECT DISTINCT new com.example.demo.dto.NguoiDungDTO(nd.id, nd.ma, nd.avatar, nd.ten, nd.username, nd.email, " +
-            "nd.gioiTinh, nd.trangThai, dc.dienThoai) " +
-            "FROM NguoiDung nd " +
-            "LEFT JOIN DiaChi dc ON nd.id = dc.nguoiDung.id " +
-            "WHERE nd.vaiTro.id = 3")
+    @Query("SELECT new com.example.demo.dto.NguoiDungDTO(nd.id, nd.ma, nd.avatar, nd.ten, nd.username, nd.email, " +
+            "nd.gioiTinh, nd.trangThai, nd.dienThoai) " +
+            "FROM NguoiDung nd ")
     List<NguoiDungDTO> findAllKhachHangWithPhone();
 }

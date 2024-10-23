@@ -27,6 +27,8 @@ public class NguoiDung {
     @Column(name = "Username")
     private String username;
 
+    @Column(name = "dien_thoai")
+    private String dienThoai;
     @Column(name = "Password")
     private String password;
 
