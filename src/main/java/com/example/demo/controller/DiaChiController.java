@@ -27,10 +27,10 @@ public class DiaChiController {
 
     @PutMapping("/dia-chi/first/{id}")
     public ResponseEntity<?> updateHoaDonWithNguoiDungAndGetFirstDiaChi(
-            @PathVariable Long idHoaDon,
+            @PathVariable Long id,
             @RequestParam Long idNguoiDung) {
         try {
-            DiaChi diaChi = diaChiService.updateHoaDonWithNguoiDungAndGetFirstDiaChi(idHoaDon, idNguoiDung);
+            DiaChi diaChi = diaChiService.updateHoaDonWithNguoiDungAndGetFirstDiaChi(id, idNguoiDung);
             return ResponseEntity.ok(diaChi);
         } catch (AppException e) {
             return ResponseEntity.status(e.getCode()).body(e.getMessage());
