@@ -2,10 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ChiTietHoaDonDTO;
 import com.example.demo.model.*;
-import com.example.demo.repository.ChiTietHoaDonRepository;
-import com.example.demo.repository.ChiTietSanPhamRepository;
-import com.example.demo.repository.HinhAnhRepository;
-import com.example.demo.repository.HoaDonRepository;
+import com.example.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,15 +19,18 @@ public class ChiTietHoaDonService {
     @Autowired
     private ChiTietHoaDonRepository chiTietHoaDonRepository;
     @Autowired
+    private KhuyenMaiHoaDonRepository khuyenMaiHoaDonRepository;
+    @Autowired
     private HoaDonRepository hoaDonRepository;
     @Autowired
     private ChiTietSanPhamRepository chiTietSanPhamRepository;
     @Autowired
     private HinhAnhRepository hinhAnhRepository;
-
+@Autowired
+HoaDonService hoaDonService;
 
     public List<ChiTietHoaDonDTO> getAllChiTietHoaDonWithDetails() {
-        List<ChiTietHoaDonDTO> chiTietHoaDonDTOS = chiTietHoaDonRepository.findAllChiTietHoaDon(); // Bạn cần đảm bảo phương thức này trả về List thay vì Page
+        List<ChiTietHoaDonDTO> chiTietHoaDonDTOS = chiTietHoaDonRepository.findAllChiTietHoaDon();
         List<ChiTietHoaDonDTO> result = new ArrayList<>();
 
         for (ChiTietHoaDonDTO chiTietHoaDonDTO : chiTietHoaDonDTOS) {
@@ -50,8 +50,10 @@ public class ChiTietHoaDonService {
             dto.setKhuyenMaiId(chiTietHoaDonDTO.getKhuyenMaiId());
             dto.setChiTietSanPhamId(chiTietHoaDonDTO.getChiTietSanPhamId());
             dto.setMaSanPhamChiTiet(chiTietHoaDonDTO.getMaSanPham());
+            dto.setCanNang(chiTietHoaDonDTO.getCanNang());
             dto.setChatLieuDaySanPham(chiTietHoaDonDTO.getChatLieuDaySanPham());
             dto.setChatLieuVoSanPham(chiTietHoaDonDTO.getChatLieuVoSanPham());
+            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonDTO.getHoaDonId()));
             dto.setHinhDangSanPham(chiTietHoaDonDTO.getHinhDangSanPham());
             dto.setLoaiKinhSanPham(chiTietHoaDonDTO.getLoaiKinhSanPham());
             dto.setLoaiMaySanPham(chiTietHoaDonDTO.getLoaiMaySanPham());
@@ -75,13 +77,9 @@ public class ChiTietHoaDonService {
             ChiTietHoaDonDTO dto = new ChiTietHoaDonDTO();
             dto.setChiTietHoaDonId(chiTietHoaDonOptional.get().getChiTietHoaDonId());
             dto.setHoaDonId(chiTietHoaDonOptional.get().getHoaDonId());
-
             BigDecimal slsp = BigDecimal.valueOf(chiTietHoaDonOptional.get().getSoLuong()) ;
-
             BigDecimal giasp = chiTietHoaDonOptional.get().getGiaSanPham();
-
             BigDecimal giaa = slsp.multiply(giasp);
-
             dto.setTongTienChiTietHoaDon(giaa);
             dto.setSanPhamId(chiTietHoaDonOptional.get().getSanPhamId());
             dto.setMaSanPham(chiTietHoaDonOptional.get().getMaSanPham());
@@ -97,10 +95,10 @@ public class ChiTietHoaDonService {
             dto.setLoaiMaySanPham(chiTietHoaDonOptional.get().getLoaiMaySanPham());
             dto.setMauSacSanPham(chiTietHoaDonOptional.get().getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDonOptional.get().getSoLuong());
+            dto.setCanNang(chiTietHoaDonOptional.get().getCanNang());
+            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDonOptional.get().getHoaDonId()));
             dto.setGiaTungSanPham(chiTietHoaDonOptional.get().getGiaTungSanPham());
-            
             List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDonOptional.get().getSanPhamId());
-
             dto.setHinhAnh(hinhAnhData);
 
             return Optional.of(dto);
@@ -129,7 +127,6 @@ public class ChiTietHoaDonService {
             BigDecimal slsp = BigDecimal.valueOf(chiTietHoaDon.getSoLuong());
             BigDecimal giasp = chiTietHoaDon.getGiaTungSanPham();
             BigDecimal tongTienChiTiet = slsp.multiply(giasp);
-
             dto.setTongTienChiTietHoaDon(tongTienChiTiet);
             dto.setSanPhamId(chiTietHoaDon.getSanPhamId());
             dto.setMaSanPham(chiTietHoaDon.getMaSanPham());
@@ -145,8 +142,9 @@ public class ChiTietHoaDonService {
             dto.setLoaiMaySanPham(chiTietHoaDon.getLoaiMaySanPham());
             dto.setMauSacSanPham(chiTietHoaDon.getMauSacSanPham());
             dto.setSoLuong(chiTietHoaDon.getSoLuong());
+            dto.setTongCanNang(hoaDonService.tinhTongCanNang(chiTietHoaDon.getHoaDonId()));
+            dto.setCanNang(chiTietHoaDon.getCanNang());
             dto.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
-
             // Lấy hình ảnh từ repository và gán vào DTO
             List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(chiTietHoaDon.getSanPhamId());
             dto.setHinhAnh(hinhAnhData);
@@ -158,12 +156,48 @@ public class ChiTietHoaDonService {
             result.add(dto);
         }
 
-        // Tạo một map để trả về cả danh sách chi tiết hóa đơn và tổng tiền hóa đơn
+        // Lấy danh sách khuyến mãi từ repository
+        List<KhuyenMaiHoaDon> khuyenMaiList = khuyenMaiHoaDonRepository.findAll();
+
+        // Tìm mã khuyến mãi tốt nhất
+        KhuyenMaiHoaDon khuyenMaiTotNhat = null;
+        BigDecimal giaGiamTotNhat = BigDecimal.ZERO;
+
+        // Duyệt qua danh sách khuyến mãi
+        for (KhuyenMaiHoaDon km : khuyenMaiList) {
+            // Kiểm tra nếu khuyenMaiTuGia không null và tổng tiền đủ điều kiện
+            if (km.getKhuyenMaiTuGia() == null || tongTienHoaDon.compareTo(km.getKhuyenMaiTuGia()) >= 0) {
+                BigDecimal giaGiam = BigDecimal.ZERO;
+
+                // Tính toán số tiền giảm dựa trên phần trăm hoặc số tiền
+                if (km.getPhanTramGiamGia() != null) {
+                    giaGiam = tongTienHoaDon.multiply(BigDecimal.valueOf(km.getPhanTramGiamGia() / 100));
+                } else if (km.getSoTienGiam() != null) {
+                    giaGiam = BigDecimal.valueOf(km.getSoTienGiam());
+                }
+
+                // Cập nhật mã khuyến mãi tốt nhất nếu tìm thấy mức giảm tốt hơn
+                if (giaGiam.compareTo(giaGiamTotNhat) > 0) {
+                    giaGiamTotNhat = giaGiam;
+                    khuyenMaiTotNhat = km;
+                }
+            }
+        }
+
+        // Tạo map để trả về danh sách chi tiết hóa đơn và tổng tiền sau khi áp dụng khuyến mãi
         Map<String, Object> response = new HashMap<>();
         response.put("chiTietHoaDons", result);
         response.put("tongTienHoaDon", tongTienHoaDon);
 
-        return response; // Trả về danh sách ChiTietHoaDonDTO và tổng tiền hóa đơn
+        if (khuyenMaiTotNhat != null) {
+            response.put("maKhuyenMaiTotNhat", khuyenMaiTotNhat.getMa());
+            response.put("giaGiamTotNhat", giaGiamTotNhat);
+            response.put("tongTienSauKhuyenMai", tongTienHoaDon.subtract(giaGiamTotNhat));
+        } else {
+            response.put("tongTienSauKhuyenMai", tongTienHoaDon);
+        }
+
+        return response; // Trả về danh sách chi tiết hóa đơn và tổng tiền hóa đơn sau khuyến mãi
     }
 
 
@@ -189,11 +223,11 @@ public class ChiTietHoaDonService {
                 chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
                 chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
                 chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-                chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
+                chiTietHoaDonDTO.setGiaSanPham(chiTietSanPham.getGia());
                 chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
                 chiTietHoaDonDTO.setMaSanPhamChiTiet(chiTietSanPham.getMa());
                 chiTietHoaDonDTO.setGiaTungSanPham(chiTietHoaDon.getGiaTungSanPham());
-
+                chiTietHoaDonDTO.setCanNang(chiTietHoaDon.getCanNang());
                 BigDecimal giaTungSanPham = chiTietHoaDon.getGiaTungSanPham();
 
                 BigDecimal tongTienChiTietHoaDon = giaTungSanPham.multiply(new BigDecimal(chiTietHoaDon.getSoLuong()));
@@ -327,12 +361,12 @@ public class ChiTietHoaDonService {
             chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
             chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
             chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-            chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
+
             chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai().getId());
 
             // Thiết lập mã sản phẩm chi tiết
             chiTietHoaDonDTO.setMaSanPhamChiTiet(existingChiTietHoaDon.getChiTietSanPham().getMa());
-
+            chiTietHoaDonDTO.setGiaSanPham(existingChiTietHoaDon.getChiTietSanPham().getGia());
             // Thiết lập các thuộc tính khác từ chiTietSanPham
             chiTietHoaDonDTO.setChiTietSanPhamId(existingChiTietHoaDon.getChiTietSanPham().getId());
             chiTietHoaDonDTO.setChatLieuDaySanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay().getTen());
@@ -360,60 +394,54 @@ public class ChiTietHoaDonService {
 
         if (chiTietHoaDonOptional.isPresent()) {
             ChiTietHoaDon existingChiTietHoaDon = chiTietHoaDonOptional.get();
-            int currentSoLuong = existingChiTietHoaDon.getSoLuong();
-            int maxSoLuong = existingChiTietHoaDon.getChiTietSanPham().getSoLuong(); // Lấy số lượng từ ChiTietSanPham
 
-            // Kiểm tra xem số lượng có vượt quá số lượng tồn kho
-            if (currentSoLuong < maxSoLuong) {
-                // Cập nhật số lượng, cộng thêm 1
-                existingChiTietHoaDon.setSoLuong(currentSoLuong + 1);
+            // Cập nhật số lượng, cộng thêm 1
+            existingChiTietHoaDon.setSoLuong(existingChiTietHoaDon.getSoLuong() + 1);
 
-                // Lưu lại hóa đơn đã cập nhật
-                chiTietHoaDonRepository.save(existingChiTietHoaDon);
+            // Lưu lại hóa đơn đã cập nhật
+            chiTietHoaDonRepository.save(existingChiTietHoaDon);
 
-                // Tạo DTO cho chi tiết hóa đơn đã cập nhật
-                ChiTietHoaDonDTO chiTietHoaDonDTO = new ChiTietHoaDonDTO();
-                SanPham sanPham = existingChiTietHoaDon.getChiTietSanPham().getSanPham();
+            // Tạo DTO cho chi tiết hóa đơn đã cập nhật
+            ChiTietHoaDonDTO chiTietHoaDonDTO = new ChiTietHoaDonDTO();
+            SanPham sanPham = existingChiTietHoaDon.getChiTietSanPham().getSanPham(); // Giả sử có thể lấy SanPham từ ChiTietSanPham
 
-                // Tính tổng tiền chi tiết hóa đơn
-                BigDecimal tongTienChiTietHoaDon = existingChiTietHoaDon.getGiaTungSanPham()
-                        .multiply(new BigDecimal(existingChiTietHoaDon.getSoLuong()));
+            // Tính tổng tiền chi tiết hóa đơn
+            BigDecimal tongTienChiTietHoaDon = existingChiTietHoaDon.getGiaTungSanPham()
+                    .multiply(new BigDecimal(existingChiTietHoaDon.getSoLuong()));
 
-                // Thiết lập các thông tin cho DTO
-                chiTietHoaDonDTO.setChiTietHoaDonId(existingChiTietHoaDon.getId());
-                chiTietHoaDonDTO.setHoaDonId(existingChiTietHoaDon.getHoaDon().getId());
-                chiTietHoaDonDTO.setTongTienChiTietHoaDon(tongTienChiTietHoaDon);
-                chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
-                chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
-                chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-                chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
-                chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
-                chiTietHoaDonDTO.setMaSanPhamChiTiet(existingChiTietHoaDon.getChiTietSanPham().getMa());
+            // Thiết lập các thông tin cho DTO
+            chiTietHoaDonDTO.setChiTietHoaDonId(existingChiTietHoaDon.getId());
+            chiTietHoaDonDTO.setHoaDonId(existingChiTietHoaDon.getHoaDon().getId());
+            chiTietHoaDonDTO.setTongTienChiTietHoaDon(tongTienChiTietHoaDon);
+            chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
+            chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
+            chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
 
-                // Thiết lập các thuộc tính khác từ chiTietSanPham
-                chiTietHoaDonDTO.setChiTietSanPhamId(existingChiTietHoaDon.getChiTietSanPham().getId());
-                chiTietHoaDonDTO.setChatLieuDaySanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay() != null ? existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay().getTen() : null);
-                chiTietHoaDonDTO.setChatLieuVoSanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuVo() != null ? existingChiTietHoaDon.getChiTietSanPham().getChatLieuVo().getTen() : null);
-                chiTietHoaDonDTO.setHinhDangSanPham(existingChiTietHoaDon.getChiTietSanPham().getHinhDang() != null ? existingChiTietHoaDon.getChiTietSanPham().getHinhDang().getTen() : null);
-                chiTietHoaDonDTO.setLoaiKinhSanPham(existingChiTietHoaDon.getChiTietSanPham().getLoaiKinh() != null ? existingChiTietHoaDon.getChiTietSanPham().getLoaiKinh().getTen() : null);
-                chiTietHoaDonDTO.setLoaiMaySanPham(existingChiTietHoaDon.getChiTietSanPham().getLoaiMay() != null ? existingChiTietHoaDon.getChiTietSanPham().getLoaiMay().getTen() : null);
-                chiTietHoaDonDTO.setMauSacSanPham(existingChiTietHoaDon.getChiTietSanPham().getMauSac() != null ? existingChiTietHoaDon.getChiTietSanPham().getMauSac().getTen() : null);
-                chiTietHoaDonDTO.setGiaTungSanPham(existingChiTietHoaDon.getGiaTungSanPham());
-                chiTietHoaDonDTO.setSoLuong(existingChiTietHoaDon.getSoLuong());
+            chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
 
-                // Lấy danh sách hình ảnh
-                List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(sanPham.getId());
-                chiTietHoaDonDTO.setHinhAnh(hinhAnhData);
+            // Thiết lập mã sản phẩm chi tiết
+            chiTietHoaDonDTO.setMaSanPhamChiTiet(existingChiTietHoaDon.getChiTietSanPham().getMa());
+            chiTietHoaDonDTO.setGiaSanPham(existingChiTietHoaDon.getChiTietSanPham().getGia());
+            // Thiết lập các thuộc tính khác từ chiTietSanPham
+            chiTietHoaDonDTO.setChiTietSanPhamId(existingChiTietHoaDon.getChiTietSanPham().getId());
+            chiTietHoaDonDTO.setChatLieuDaySanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay() != null ? existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay().getTen() : null);
+            chiTietHoaDonDTO.setChatLieuVoSanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuVo() != null ? existingChiTietHoaDon.getChiTietSanPham().getChatLieuVo().getTen() : null);
+            chiTietHoaDonDTO.setHinhDangSanPham(existingChiTietHoaDon.getChiTietSanPham().getHinhDang() != null ? existingChiTietHoaDon.getChiTietSanPham().getHinhDang().getTen() : null);
+            chiTietHoaDonDTO.setLoaiKinhSanPham(existingChiTietHoaDon.getChiTietSanPham().getLoaiKinh() != null ? existingChiTietHoaDon.getChiTietSanPham().getLoaiKinh().getTen() : null);
+            chiTietHoaDonDTO.setLoaiMaySanPham(existingChiTietHoaDon.getChiTietSanPham().getLoaiMay() != null ? existingChiTietHoaDon.getChiTietSanPham().getLoaiMay().getTen() : null);
+            chiTietHoaDonDTO.setMauSacSanPham(existingChiTietHoaDon.getChiTietSanPham().getMauSac() != null ? existingChiTietHoaDon.getChiTietSanPham().getMauSac().getTen() : null);
+            chiTietHoaDonDTO.setGiaTungSanPham(existingChiTietHoaDon.getGiaTungSanPham());
+            chiTietHoaDonDTO.setSoLuong(existingChiTietHoaDon.getSoLuong());
 
-                return Optional.of(chiTietHoaDonDTO);
-            } else {
-                return Optional.empty();
-            }
+            // Lấy danh sách hình ảnh
+            List<String> hinhAnhData = hinhAnhRepository.getHinhAnhsByIdSanPham(sanPham.getId());
+            chiTietHoaDonDTO.setHinhAnh(hinhAnhData);
+
+            return Optional.of(chiTietHoaDonDTO);
         }
 
         return Optional.empty();
     }
-
 
     public Optional<ChiTietHoaDonDTO> truSoLuongSanPhamHoaDon(Long idCTHD) {
         // Tìm chi tiết hóa đơn theo ID
@@ -443,12 +471,12 @@ public class ChiTietHoaDonService {
             chiTietHoaDonDTO.setSanPhamId(sanPham.getId());
             chiTietHoaDonDTO.setMaSanPham(sanPham.getMa());
             chiTietHoaDonDTO.setTenSanPham(sanPham.getTen());
-            chiTietHoaDonDTO.setGiaSanPham(sanPham.getGia());
+
             chiTietHoaDonDTO.setKhuyenMaiId(sanPham.getKhuyenMai() != null ? sanPham.getKhuyenMai().getId() : null);
 
             // Thiết lập mã sản phẩm chi tiết
             chiTietHoaDonDTO.setMaSanPhamChiTiet(existingChiTietHoaDon.getChiTietSanPham().getMa());
-
+            chiTietHoaDonDTO.setGiaSanPham(existingChiTietHoaDon.getChiTietSanPham().getGia());
             // Thiết lập các thuộc tính khác từ chiTietSanPham
             chiTietHoaDonDTO.setChiTietSanPhamId(existingChiTietHoaDon.getChiTietSanPham().getId());
             chiTietHoaDonDTO.setChatLieuDaySanPham(existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay() != null ? existingChiTietHoaDon.getChiTietSanPham().getChatLieuDay().getTen() : null);

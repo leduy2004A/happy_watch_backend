@@ -26,6 +26,9 @@ public class ChiTietHoaDonDTO {
     private String loaiMaySanPham;
     private String mauSacSanPham;
     private Integer soLuong;
+
+    private Integer tongCanNang;
+    private Integer canNang;
     private BigDecimal giaTungSanPham;
 
     // Trường danh sách hình ảnh
@@ -39,10 +42,10 @@ public class ChiTietHoaDonDTO {
             Long sanPhamId,
             String maSanPham,
             String tenSanPham,
-            BigDecimal giaSanPham,
             Long khuyenMaiId,
             Long chiTietSanPhamId,
             String maSanPhamChiTiet,
+            BigDecimal giaSanPham,
             String chatLieuDaySanPham,
             String chatLieuVoSanPham,
             String hinhDangSanPham,

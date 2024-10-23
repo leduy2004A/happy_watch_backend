@@ -25,9 +25,6 @@ public class SanPham {
     @Column(name = "ten")
     private String ten;
 
-    @Column(name = "gia")
-    private BigDecimal gia;
-
     @Column(name = "Created_at")
     private LocalDate createdAt;
 

@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SanPhamChiTietDTO {
     private Long sanPhamId;
+    private Long chiTietSanPhamId;
     private String maSanPham;
     private List<String> hinhAnh;
     private String tenSanPham;
@@ -29,4 +30,6 @@ public class SanPhamChiTietDTO {
     private String baoHanh;
     private String hinhDang;
     private String gioiTinh;
+
+    private Integer canNang;
 }

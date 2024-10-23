@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/chitiethoadon")
+@CrossOrigin()
 public class ChiTietHoaDonController {
 
     @Autowired

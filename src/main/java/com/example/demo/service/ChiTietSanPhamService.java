@@ -35,6 +35,7 @@ public class ChiTietSanPhamService {
             existingChiTietSanPham.setMa(chiTietSanPhamUpdate.getMa());
             existingChiTietSanPham.setMauSac(chiTietSanPhamUpdate.getMauSac());
             existingChiTietSanPham.setLoaiMay(chiTietSanPhamUpdate.getLoaiMay());
+            existingChiTietSanPham.setGia(chiTietSanPhamUpdate.getGia());
             existingChiTietSanPham.setChatLieuVo(chiTietSanPhamUpdate.getChatLieuVo());
             existingChiTietSanPham.setChatLieuDay(chiTietSanPhamUpdate.getChatLieuDay());
             existingChiTietSanPham.setKichThuoc(chiTietSanPhamUpdate.getKichThuoc());
@@ -42,6 +43,7 @@ public class ChiTietSanPhamService {
             existingChiTietSanPham.setXuatXu(chiTietSanPhamUpdate.getXuatXu());
             existingChiTietSanPham.setBaoHanh(chiTietSanPhamUpdate.getBaoHanh());
             existingChiTietSanPham.setSoLuong(chiTietSanPhamUpdate.getSoLuong());
+            existingChiTietSanPham.setCanNang(chiTietSanPhamUpdate.getCanNang());
             return chiTietSanPhamRepository.save(existingChiTietSanPham);
         } else {
             throw new RuntimeException("Chi tiết sản phẩm không tồn tại với mã: " + maChiTietSanPham);

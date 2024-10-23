@@ -1,9 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.HoaDon;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,4 +25,41 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Query("SELECT h.ma FROM HoaDon h ORDER BY h.ma DESC LIMIT 1")
     String findLastMaHoaDon();
 
+    @Query("SELECT hd FROM HoaDon hd WHERE hd.trangThai = 'Pending Payment' AND hd.nguoiDung.id = :idNguoiDung")
+    List<HoaDon> findHoaDonByNguoiDungIdAndTrangThaiChoThanhToan(@Param("idNguoiDung") Long idNguoiDung);
+
+
+    @Query("SELECT hd FROM HoaDon hd WHERE hd.trangThai = 'Pending Payment'")//nháp sau xóa
+    List<HoaDon> findAllHoaDonChoThanhToan();
+
+    //hiển thị hóa đơn đã thanh toán
+    @Query("SELECT hd FROM HoaDon hd WHERE hd.trangThai = 'Paid'")
+    List<HoaDon> findAllHoaDonPaid();
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE HoaDon hd SET hd.trangThai = 'Cancelled' WHERE hd.id = :id")
+    int updateTrangThaiHoaDonToCancelled(@Param("id") Long id);
+
+    //lấy tất cả các hóa đơn có trạng thái đã hủy
+    @Query("SELECT hd FROM HoaDon hd WHERE hd.trangThai = 'Cancelled'")
+    List<HoaDon> findAllHoaDonCancelled();
+
+    // Cập nhật trạng thái của hóa đơn thành "Confirmed"
+    @Modifying
+    @Transactional
+    @Query("UPDATE HoaDon hd SET hd.trangThai = 'Confirmed', hd.tenNguoiNhan = :tenNguoiNhan, "
+            +"hd.tinhThanhPho = :tinhThanhPho,"
+            + "hd.quanHuyen = :quanHuyen, hd.xaPhuongThiTran = :xaPhuongThiTran, "
+            + "hd.diaChiCuThe = :diaChiCuThe, hd.dienThoai = :dienThoai "
+            + "WHERE hd.id = :id")
+    int updateHoaDonToConfirmedWithAddress(
+            @Param("id") Long id,
+            @Param("tenNguoiNhan") String tenNguoiNhan,
+            @Param("tinhThanhPho") String tinhThanhPho,
+            @Param("quanHuyen") String quanHuyen,
+            @Param("xaPhuongThiTran") String xaPhuongThiTran,
+            @Param("diaChiCuThe") String diaChiCuThe,
+            @Param("dienThoai") String dienThoai
+    );
 }
