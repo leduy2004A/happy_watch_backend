@@ -25,11 +25,10 @@ public class DiaChiController {
         return ResponseEntity.ok(diaChis);
     }
 
-    @PutMapping("/dia-chi/first/{idHoaDon}")
+    @PutMapping("/dia-chi/first/{id}")
     public ResponseEntity<?> updateHoaDonWithNguoiDungAndGetFirstDiaChi(
             @PathVariable Long idHoaDon,
             @RequestParam Long idNguoiDung) {
-        System.out.println(idHoaDon);
         try {
             DiaChi diaChi = diaChiService.updateHoaDonWithNguoiDungAndGetFirstDiaChi(idHoaDon, idNguoiDung);
             return ResponseEntity.ok(diaChi);

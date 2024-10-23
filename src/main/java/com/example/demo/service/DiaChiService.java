@@ -34,14 +34,9 @@ public class DiaChiService {
                 .orElseThrow(() -> new AppException(404, "Hóa đơn không tồn tại"));
         NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
                 .orElseThrow(() -> new AppException(404, "Người dùng không tồn tại"));
-
         hoaDon.setNguoiDung(nguoiDung);
         hoaDonRepository.save(hoaDon);
-
         List<DiaChi> diaChis = diaChiRepository.findByIdNguoiDung(idNguoiDung);
-        if (diaChis.isEmpty()) {
-            throw new AppException(404, "Người dùng này không có địa chỉ nào.");
-        }
         return diaChis.get(0);
     }
 
