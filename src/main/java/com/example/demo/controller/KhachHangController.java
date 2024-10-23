@@ -24,4 +24,5 @@ public class KhachHangController {
         List<NguoiDungDTO> khachHangList = nguoiDungService.getAllCustomersWithPhone();
         return ResponseEntity.ok(khachHangList);
     }
+
 }

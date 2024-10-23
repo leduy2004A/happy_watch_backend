@@ -18,6 +18,4 @@ public class NguoiDungDTO {
     private boolean trangThai;
     private String dienThoai;
 
-
-
 }
