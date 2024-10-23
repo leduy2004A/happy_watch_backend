@@ -14,7 +14,8 @@ public class KhachHangService {
     private NguoiDungRepository nguoiDungRepository;
 
     public List<NguoiDungDTO> getAllCustomersWithPhone() {
-        return nguoiDungRepository.findAllKhachHangWithPhone();
+        List<NguoiDungDTO> nguoiDungDTOs = nguoiDungRepository.findAllKhachHangWithPhone();
+        return nguoiDungDTOs;
     }
 
 }

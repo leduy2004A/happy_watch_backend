@@ -15,6 +15,9 @@ public class NguoiDungDTO {
     private String username;
     private String email;
     private String gioiTinh;
-    private Boolean trangThai;
+    private boolean trangThai;
     private String dienThoai;
+
+
+
 }
