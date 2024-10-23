@@ -7,6 +7,7 @@ import com.example.demo.model.NguoiDung;
 import com.example.demo.repository.DiaChiRepository;
 import com.example.demo.repository.HoaDonRepository;
 import com.example.demo.repository.NguoiDungRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,13 @@ public class DiaChiService {
 
     public Optional<DiaChi> getDiaChiByNguoiDungIdAndDiaChiId(Long idNguoiDung, Long idDiaChi) {
         return diaChiRepository.findByIdNguoiDungAndIdDiaChi(idNguoiDung, idDiaChi);
+    }
+
+    @Transactional
+    public DiaChi addDiaChiForNguoiDung(Long idNguoiDung, DiaChi diaChi) {
+        NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
+                .orElseThrow(() -> new AppException(404, "Người dùng không tồn tại với ID: " + idNguoiDung));
+        diaChi.setNguoiDung(nguoiDung);
+        return diaChiRepository.save(diaChi);
     }
 }

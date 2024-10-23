@@ -19,6 +19,9 @@ public class DiaChi {
     @Column(name = "ma", nullable = false)
     private String ma;
 
+    @Column(name = "ten_nguoi_dung")
+    private String tenNguoiDung;
+
     @Column(name = "tinh_thanh_pho")
     private String tinhThanhPho;
 

@@ -47,4 +47,16 @@ public class DiaChiController {
         return diaChi.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PostMapping("/add/{idNguoiDung}")
+    public ResponseEntity<?> addDiaChiForNguoiDung(
+            @PathVariable Long idNguoiDung,
+            @RequestBody DiaChi diaChi) {
+        try {
+            DiaChi savedDiaChi = diaChiService.addDiaChiForNguoiDung(idNguoiDung, diaChi);
+            return ResponseEntity.ok(savedDiaChi);
+        } catch (AppException ex) {
+            return ResponseEntity.status(ex.getCode()).body(ex.getMessage());
+        }
+    }
 }
