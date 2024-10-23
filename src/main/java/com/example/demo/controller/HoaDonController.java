@@ -89,7 +89,6 @@ public class HoaDonController {
         return hoaDonOptional
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 
 
@@ -145,22 +144,27 @@ public class HoaDonController {
             @RequestParam String diaChiCuThe,
             @RequestParam String dienThoai) {
 
-        boolean isUpdated = hoaDonService.confirmHoaDonWithAddress(
-                idHoaDon,
-                tenNguoiNhan,
-                tinhThanhPho,
-                quanHuyen,
-                xaPhuongThiTran,
-                diaChiCuThe,
-                dienThoai
-        );
+        try {
+            boolean isUpdated = hoaDonService.confirmHoaDonWithAddress(
+                    idHoaDon,
+                    tenNguoiNhan,
+                    tinhThanhPho,
+                    quanHuyen,
+                    xaPhuongThiTran,
+                    diaChiCuThe,
+                    dienThoai
+            );
 
-        if (isUpdated) {
-            return ResponseEntity.ok("Hóa đơn đã được xác nhận và địa chỉ đã được cập nhật.");
-        } else {
-            return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật địa chỉ.");
+            if (isUpdated) {
+                return ResponseEntity.ok("Hóa đơn đã được xác nhận và địa chỉ đã được cập nhật.");
+            } else {
+                return ResponseEntity.badRequest().body("Không tìm thấy hóa đơn hoặc không thể cập nhật địa chỉ.");
+            }
+        } catch (AppException ex) {
+            return ResponseEntity.status(ex.getCode()).body(ex.getMessage());
         }
     }
+
 
 
     //thêm loại hóa đơn

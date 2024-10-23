@@ -316,9 +316,18 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     // Phương thức cập nhật trạng thái hóa đơn thành "Confirmed"
     @Transactional
-    public boolean confirmHoaDonWithAddress(Long idHoaDon, String tenNguoiNhan ,String tinhThanhPho, String quanHuyen,
+    public boolean confirmHoaDonWithAddress(Long idHoaDon, String tenNguoiNhan, String tinhThanhPho, String quanHuyen,
                                             String xaPhuongThiTran, String diaChiCuThe, String dienThoai) {
 
+        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
+                .orElseThrow(() -> new AppException(404, "Hóa đơn không tồn tại với ID: " + idHoaDon));
+        List<ChiTietHoaDon> chiTietHoaDonList = chiTietHoaDonRepository.findByHoaDonId(idHoaDon);
+        if (chiTietHoaDonList.isEmpty()) {
+            throw new AppException(400, "Hóa đơn không chứa sản phẩm, không thể xác nhận.");
+        }
+        if (hoaDon.getNguoiDung() == null) {
+            throw new AppException(400, "Hóa đơn chưa có khách hàng, vui lòng thêm khách hàng trước khi xác nhận.");
+        }
         int updatedRows = hoaDonRepository.updateHoaDonToConfirmedWithAddress(
                 idHoaDon,
                 tenNguoiNhan,
@@ -328,8 +337,9 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
                 diaChiCuThe,
                 dienThoai
         );
-        return updatedRows > 0; // Trả về true nếu cập nhật thành công
+        return updatedRows > 0;
     }
+
 
     public int tinhTongCanNang(Long idHoaDon) {
         Optional<HoaDon> hoaDonOpt = hoaDonRepository.findById(idHoaDon);
