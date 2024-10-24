@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -89,8 +90,7 @@ public class ChiTietGioHangController {
         GioHang gioHang = optionalGioHang.get();
         ChiTietSanPham chiTietSanPham = optionalChiTietSanPham.get();
         int soLuong = cartDetailsDTO.getSoLuong() < 1 ? 1 : cartDetailsDTO.getSoLuong();
-        double giaTungSanPham = chiTietSanPham.getSanPham().getGia();
-
+        BigDecimal giaTungSanPham = cartDetailsDTO.getGiaTungSanPham();
         // Create and add a new ChiTietGioHang entity
         ChiTietGioHang cartDetail = gioHang.getCartDetails().stream()
                 .filter(detail -> detail.getChiTietSanPham().getId().equals(cartDetailsDTO.getIdSanPhamChiTiet())
@@ -107,7 +107,7 @@ public class ChiTietGioHangController {
 
         gioHang.getCartDetails().add(cartDetail);
         gioHang.setTongSoLuong(gioHang.getTongSoLuong() + soLuong);
-        gioHang.setTongGia(gioHang.getTongGia() + soLuong * giaTungSanPham);
+        gioHang.setTongGia(gioHang.getTongGia().add(giaTungSanPham.multiply(BigDecimal.valueOf(soLuong))));
 
         // Save the GioHang entity (cascading will save the new ChiTietGioHang entity)
         gioHangRepository.save(gioHang);
@@ -139,7 +139,7 @@ public class ChiTietGioHangController {
 
         // Update the cart's total quantity and total price
         cart.setTongSoLuong(cart.getTongSoLuong() - quantityDifference);
-        cart.setTongGia(cart.getTongGia() - cartDetail.getGiaTungSanPham() * quantityDifference);
+        cart.setTongGia(cart.getTongGia().subtract(cartDetail.getGiaTungSanPham().multiply(BigDecimal.valueOf(quantityDifference))));
 
         gioHangRepository.save(cart);
 
@@ -160,7 +160,7 @@ public class ChiTietGioHangController {
         chiTietGioHangRepository.delete(cartDetail);
         cart.getCartDetails().remove(cartDetail);
         cart.setTongSoLuong(cart.getTongSoLuong() - cartDetail.getSoLuong());
-        cart.setTongGia(cart.getTongGia() - cartDetail.getSoLuong() * cartDetail.getGiaTungSanPham());
+        cart.setTongGia(cart.getTongGia().subtract(cartDetail.getGiaTungSanPham().multiply(BigDecimal.valueOf(cartDetail.getSoLuong()))));
         gioHangRepository.save(cart);
 
         return ResponseEntity.status(HttpStatus.OK).body("Cart detail deleted successfully");

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -57,5 +59,13 @@ public class ChiTietSanPham {
     @ManyToOne
     @JoinColumn(name = "id_hinh_dang")
     private HinhDang hinhDang;
-    // Getters and Setters
+
+    @Column(name = "so_luong")
+    private int soLuong;
+
+    @Column(name = "gia")
+    private BigDecimal gia;
+
+    @Column(name = "can_nang")
+    private Integer canNang;
 }

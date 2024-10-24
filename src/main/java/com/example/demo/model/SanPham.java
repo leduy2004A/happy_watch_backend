@@ -20,6 +20,11 @@ import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
@@ -36,16 +41,11 @@ public class SanPham {
     @Column(name = "ten")
     private String ten;
 
-    @Column(name = "gia")
-    private Double gia;
-
     @Column(name = "Created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Column(name = "Updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "id_thuong_hieu")
@@ -62,7 +62,6 @@ public class SanPham {
     @JoinColumn(name = "id_gioi_tinh")
     private GioiTinh gioiTinh;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChiTietSanPham> chiTietSanPhams;
 }
