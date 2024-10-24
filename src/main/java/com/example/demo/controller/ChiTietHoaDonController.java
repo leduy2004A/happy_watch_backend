@@ -93,4 +93,11 @@ public class ChiTietHoaDonController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/themsl/{sl}")
+    public ResponseEntity<ChiTietHoaDonDTO> themSoLuongSanPhamHoaDon(@RequestParam("idCTHD") Long idCTHD, @PathVariable("sl") Integer sl) {
+        Optional<ChiTietHoaDonDTO> chiTietHoaDonOptional = chiTietHoaDonService.themSoLuongSanPhamHoaDon(idCTHD, sl);
+        return chiTietHoaDonOptional
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
