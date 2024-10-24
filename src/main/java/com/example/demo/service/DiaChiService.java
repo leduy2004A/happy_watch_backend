@@ -35,11 +35,24 @@ public class DiaChiService {
                 .orElseThrow(() -> new AppException(404, "Hóa đơn không tồn tại"));
         NguoiDung nguoiDung = nguoiDungRepository.findById(idNguoiDung)
                 .orElseThrow(() -> new AppException(404, "Người dùng không tồn tại"));
+
         hoaDon.setNguoiDung(nguoiDung);
         hoaDonRepository.save(hoaDon);
+
         List<DiaChi> diaChis = diaChiRepository.findByIdNguoiDung(idNguoiDung);
+        if (diaChis.isEmpty()) {
+            DiaChi emptyDiaChi = new DiaChi();
+            emptyDiaChi.setTinhThanhPho("");
+            emptyDiaChi.setQuanHuyen("");
+            emptyDiaChi.setXaPhuongThiTran("");
+            emptyDiaChi.setDiaChiCuThe("");
+            emptyDiaChi.setDienThoai("");
+            return emptyDiaChi;
+        }
+
         return diaChis.get(0);
     }
+
 
     public Optional<DiaChi> getDiaChiByNguoiDungIdAndDiaChiId(Long idNguoiDung, Long idDiaChi) {
         return diaChiRepository.findByIdNguoiDungAndIdDiaChi(idNguoiDung, idDiaChi);
