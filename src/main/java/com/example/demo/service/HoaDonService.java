@@ -18,6 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.example.demo.model.ChiTietHoaDon;
+import com.example.demo.model.ChiTietSanPham;
+import com.example.demo.model.HoaDon;
+import com.example.demo.model.NguoiDung;
+import com.example.demo.model.ThanhToan;
+import com.example.demo.repository.ChiTietHoaDonRepository;
+import com.example.demo.repository.ChiTietSanPhamRepository;
+import com.example.demo.repository.HoaDonRepository;
+import com.example.demo.repository.NguoiDungRepository;
+import com.example.demo.repository.ThanhToanRepository;
 
 @Service
 public class HoaDonService {

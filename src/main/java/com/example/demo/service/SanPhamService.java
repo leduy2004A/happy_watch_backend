@@ -1,5 +1,17 @@
 package com.example.demo.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.demo.dto.SanPhamChiTietDTO;
 import com.example.demo.model.ChiTietSanPham;
 import com.example.demo.model.KhuyenMai;
@@ -8,18 +20,6 @@ import com.example.demo.repository.ChiTietSanPhamRepository;
 import com.example.demo.repository.HinhAnhRepository;
 import com.example.demo.repository.KhuyenMaiRepository;
 import com.example.demo.repository.SanPhamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SanPhamService {
