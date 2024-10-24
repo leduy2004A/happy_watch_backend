@@ -30,6 +30,6 @@ public class SanPhamChiTietDTO {
     private String baoHanh;
     private String hinhDang;
     private String gioiTinh;
-
     private Integer canNang;
+    private Integer soLuong;
 }

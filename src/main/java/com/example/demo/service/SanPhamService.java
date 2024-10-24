@@ -138,6 +138,7 @@ public class SanPhamService {
         dto.setXuatXu(chiTietSanPham.getXuatXu());
         dto.setBaoHanh(chiTietSanPham.getBaoHanh());
         dto.setCanNang(chiTietSanPham.getCanNang());
+        dto.setSoLuong(chiTietSanPham.getSoLuong());
         dto.setChiTietSanPhamId(chiTietSanPham.getId());
         return dto;
     }
@@ -165,6 +166,7 @@ public class SanPhamService {
         dto.setLoaiKinh(chiTietSanPham.getLoaiKinh().getTen());
         dto.setHinhDang(chiTietSanPham.getHinhDang().getTen());
         dto.setGioiTinh(sanPham.getGioiTinh().getTen());
+        dto.setSoLuong(chiTietSanPham.getSoLuong());
         dto.setXuatXu(chiTietSanPham.getXuatXu());
         dto.setBaoHanh(chiTietSanPham.getBaoHanh());
     }
