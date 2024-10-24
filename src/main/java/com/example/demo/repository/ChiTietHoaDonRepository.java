@@ -60,7 +60,7 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, Lo
     JOIN HoaDon hd ON cthd.hoaDon.id = hd.id
     WHERE hd.id = :idHD
 """)
-    List<ChiTietHoaDonDTO> findAllChiTietHoaDonDTOByIdHoaDon(@Param("idHD") Long idHD);
+    List<ChiTietHoaDonDTO> findAllChiTietHoaDonDTOByIdHoaDon(@Param("idHD") Long idCtsp);
 
     List<ChiTietHoaDon> findByHoaDonId(Long hoaDonId);
 

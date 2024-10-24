@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ChiTietHoaDonDTO;
 import com.example.demo.dto.GioHangChiTietDTO;
 import com.example.demo.model.ChiTietGioHang;
 import com.example.demo.model.ChiTietSanPham;
@@ -27,6 +28,7 @@ import com.example.demo.model.GioHang;
 import com.example.demo.repository.ChiTietGioHangRepository;
 import com.example.demo.repository.ChiTietSanPhamRepository;
 import com.example.demo.repository.GioHangRepository;
+import com.example.demo.service.ChiTietHoaDonService;
 import com.example.demo.service.GioHangService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,7 @@ public class ChiTietGioHangController {
     private final ChiTietGioHangRepository chiTietGioHangRepository;
     private final GioHangService gioHangService;
     private final ChiTietSanPhamRepository chiTietSanPhamRepository;
+    private final ChiTietHoaDonService chiTietHoaDonService;
 
     @GetMapping
     public ResponseEntity<Page<GioHangChiTietDTO>> getAllCart(@RequestParam(defaultValue = "0") int page,
@@ -71,7 +74,23 @@ public class ChiTietGioHangController {
         return ResponseEntity.ok(cartDetails.stream()
                 .map(cartDetail -> gioHangService.getCartDetailById(cartDetail.getId()).get())
                 .toList());
+    }
 
+    @GetMapping("/billDetails/{cartCode}")
+    public ResponseEntity<Object> getBillDetails(@PathVariable String cartCode) {
+        Set<Long> productIds = gioHangRepository.findByMa(cartCode).getCartDetails().stream()
+                .map(c -> c.getChiTietSanPham().getId()).collect(Collectors.toSet());
+        if (productIds.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart details not found or cart is empty");
+        }
+        List<ChiTietHoaDonDTO> billDetails = chiTietHoaDonService.getAllChiTietHoaDonWithDetails().stream()
+                .filter(billDetail -> productIds.contains(billDetail.getChiTietSanPhamId()))
+                .collect(Collectors.toList());
+
+        if (billDetails.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Bill details not exist");
+        }
+        return ResponseEntity.ok(billDetails);
     }
 
     @PostMapping
@@ -139,7 +158,8 @@ public class ChiTietGioHangController {
 
         // Update the cart's total quantity and total price
         cart.setTongSoLuong(cart.getTongSoLuong() - quantityDifference);
-        cart.setTongGia(cart.getTongGia().subtract(cartDetail.getGiaTungSanPham().multiply(BigDecimal.valueOf(quantityDifference))));
+        cart.setTongGia(cart.getTongGia()
+                .subtract(cartDetail.getGiaTungSanPham().multiply(BigDecimal.valueOf(quantityDifference))));
 
         gioHangRepository.save(cart);
 
@@ -160,9 +180,11 @@ public class ChiTietGioHangController {
         chiTietGioHangRepository.delete(cartDetail);
         cart.getCartDetails().remove(cartDetail);
         cart.setTongSoLuong(cart.getTongSoLuong() - cartDetail.getSoLuong());
-        cart.setTongGia(cart.getTongGia().subtract(cartDetail.getGiaTungSanPham().multiply(BigDecimal.valueOf(cartDetail.getSoLuong()))));
+        cart.setTongGia(cart.getTongGia()
+                .subtract(cartDetail.getGiaTungSanPham().multiply(BigDecimal.valueOf(cartDetail.getSoLuong()))));
         gioHangRepository.save(cart);
 
         return ResponseEntity.status(HttpStatus.OK).body("Cart detail deleted successfully");
     }
+
 }
