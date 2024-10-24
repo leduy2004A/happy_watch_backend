@@ -267,6 +267,7 @@ private ChiTietHoaDonRepository chiTietHoaDonRepository;
             thanhToan.setMa(UUID.randomUUID().toString());
             thanhToan.setSoTien(tienKhachDua);
             thanhToan.setMaGiaoDich(maGiaoDich);
+            thanhToan.setPhuongThuc(phuongThuc);
             ThanhToan savedThanhToan = thanhToanRepository.save(thanhToan);
             hoaDon.setTrangThai("Paid");
             hoaDon.setThanhToan(savedThanhToan);
