@@ -17,6 +17,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
     NguoiDung findByUsername(String username);
     @Query("SELECT new com.example.demo.dto.NguoiDungDTO(nd.id, nd.ma, nd.avatar, nd.ten, nd.username, nd.email, " +
             "nd.gioiTinh, nd.trangThai, nd.dienThoai) " +
-            "FROM NguoiDung nd ")
+            "FROM NguoiDung nd " +
+            "WHERE nd.id <> 1")
     List<NguoiDungDTO> findAllKhachHangWithPhone();
 }
